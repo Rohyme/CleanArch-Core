@@ -1,7 +1,7 @@
 package com.tripl3dev.presentation
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import com.tripl3dev.domain.service.ApiService
 import com.tripl3dev.presentation.application.MyApplication
 import javax.inject.Inject

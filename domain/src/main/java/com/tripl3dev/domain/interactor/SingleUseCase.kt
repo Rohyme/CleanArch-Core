@@ -1,6 +1,5 @@
 package com.tripl3dev.domain.interactor
 
-import com.tripl3dev.domain.either.Either
 import com.tripl3dev.domain.executer.ObserveOnScheduler
 import com.tripl3dev.domain.executer.SubscribtionOnScheduler
 import io.reactivex.Single
@@ -23,7 +22,6 @@ abstract class SingleUseCase<T, in params> constructor(
         val single = this.buildUseCaseObservable(params)
                 .subscribeOn(subscribeOnScheduler.getSubscribtionOnScheduler())
                 .observeOn(oberserveOnScheduler.getObserveOnScheduler()) as Single<T>
-
         addDisposable(single.subscribeWith(singleObserver))
     }
 
