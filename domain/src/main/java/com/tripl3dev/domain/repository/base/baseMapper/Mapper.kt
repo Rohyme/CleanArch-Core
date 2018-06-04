@@ -1,4 +1,4 @@
-package com.tripl3dev.domain.repository.mapper
+package com.tripl3dev.domain.repository.base.baseMapper
 
 import java.util.Collections.emptyList
 

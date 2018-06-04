@@ -1,12 +1,12 @@
 package com.tripl3dev.domain.interactor
 
+import com.tripl3dev.domain.either.Either
 import com.tripl3dev.domain.executer.ObserveOnScheduler
 import com.tripl3dev.domain.executer.SubscribtionOnScheduler
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.observers.DisposableSingleObserver
-
 
 
 abstract class SingleUseCase<T, in params> constructor(
@@ -24,15 +24,15 @@ abstract class SingleUseCase<T, in params> constructor(
                 .subscribeOn(subscribeOnScheduler.getSubscribtionOnScheduler())
                 .observeOn(oberserveOnScheduler.getObserveOnScheduler()) as Single<T>
 
-      addDisposable(single.subscribeWith(singleObserver))
+        addDisposable(single.subscribeWith(singleObserver))
     }
 
 
-    fun dispose(){
+    fun dispose() {
         if (!disposables.isDisposed) disposables.dispose()
     }
 
-    fun addDisposable(disposable:Disposable){
+    fun addDisposable(disposable: Disposable) {
         disposables.add(disposable)
     }
 }

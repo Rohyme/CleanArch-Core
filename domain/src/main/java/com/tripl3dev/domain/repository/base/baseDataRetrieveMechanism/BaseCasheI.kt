@@ -1,6 +1,6 @@
-package com.tripl3dev.domain.repository.dataRetrieveMechanism
+package com.tripl3dev.domain.repository.base.baseDataRetrieveMechanism
 
-interface BaseCashe {
+interface BaseCasheI {
 
     /**
      * Checks if an element (User) exists in the cache.

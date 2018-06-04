@@ -1,13 +1,23 @@
 apply plugin: 'java-library'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-
+apply plugin: 'kotlin'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation libs.rxJava
     implementation libs.kotlinCoroutines
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    api 'com.github.FrangSierra:RxFirebase:1.5.0'
+    api 'com.f2prateek.rx.preferences2:rx-preferences:2.0.0'
 
+    api libs.rxAndroid
+    api libs.retrofit
+    api libs.retrofitRxAdapter
+    api libs.okhttp
+    api libs.gson
+    api libs.dagger2
+    api libs.daggerSupport
+    kapt libs.daggerAnnotationProcess
 }
 
 sourceCompatibility = "1.7"
