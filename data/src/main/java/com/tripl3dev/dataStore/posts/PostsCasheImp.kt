@@ -7,10 +7,13 @@ import io.reactivex.*
 
 
 class PostsCasheImp : PostsCasheI {
+
     var postsSingle: ArrayList<PostEntity> = ArrayList()
     var isCashed: Boolean = false
         get() = postsSingle.isNotEmpty()
-    var mLastCacheTime: Long = 0
+    private var mLastCacheTime: Long = 0
+
+
     override fun savePosts(posts: ArrayList<PostEntity>) {
         Completable.create {
             postsSingle.addAll(posts)
@@ -19,11 +22,10 @@ class PostsCasheImp : PostsCasheI {
             setLastCacheTime(System.currentTimeMillis())
             isCashed = true
         })
-
-
     }
 
-    override fun getPosts(): Single<ArrayList<PostEntity>>? {
+
+    override fun getPosts(): Single<ArrayList<PostEntity>> {
         return Single.just(postsSingle)
     }
 
