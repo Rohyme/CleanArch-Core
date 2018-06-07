@@ -7,6 +7,7 @@ import com.tripl3dev.domain.Entity.PostEntity
 import com.tripl3dev.domain.businessLogic.businessUseCases.ShowPostsUseCase
 import com.tripl3dev.domain.managers.Stateview
 import io.reactivex.observers.DisposableSingleObserver
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class MainActivityViewModel @Inject constructor(val postsUseCase: ShowPostsUseCase) : ViewModel() {
@@ -21,12 +22,15 @@ class MainActivityViewModel @Inject constructor(val postsUseCase: ShowPostsUseCa
         showPosts.postValue(Stateview.Loading(true))
         postsUseCase.execute(object : DisposableSingleObserver<ArrayList<PostEntity>>() {
             override fun onSuccess(t: ArrayList<PostEntity>) {
-                if (t.isEmpty()) showPosts.postValue(Stateview.HasNoData)
-                if (t.isNotEmpty()) showPosts.postValue(Stateview.Success(t))
+                if (t.isEmpty()) showPosts.postValue(Stateview.HasNoData(true))
+                else showPosts.postValue(Stateview.Success(t))
             }
-
             override fun onError(e: Throwable) {
                 showPosts.postValue(Stateview.Failure(e))
+                if (e is HttpException) {
+                    showPosts.postValue(Stateview.ServiceError(e.code()))
+                } else
+                    showPosts.postValue(Stateview.Failure(e))
             }
 
         })

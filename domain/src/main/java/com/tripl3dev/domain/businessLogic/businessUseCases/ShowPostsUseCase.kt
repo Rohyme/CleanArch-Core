@@ -11,9 +11,9 @@ import javax.inject.Inject
 class ShowPostsUseCase @Inject constructor(val repository: PostsRepositoryI,
                                            private val observeOnScheduler: ObserveOnScheduler,
                                            private val subscribeScheduler: SubscribtionOnScheduler)
-    : SingleUseCase<ArrayList<PostEntity>, Nothing>(observeOnScheduler, subscribeScheduler) {
+    : SingleUseCase<ArrayList<PostEntity>, Void>(observeOnScheduler, subscribeScheduler) {
 
-    override fun buildUseCaseObservable(params: Nothing?): Single<ArrayList<PostEntity>> {
+    override fun buildUseCaseObservable(params: Void?): Single<ArrayList<PostEntity>> {
         return repository.getPosts()
     }
 }

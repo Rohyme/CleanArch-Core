@@ -1,10 +1,11 @@
 package com.tripl3dev.presentation.di.networkDi
 
-import android.app.Application
+import android.content.Context
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.tripl3dev.domain.service.ApiService
+import com.tripl3dev.presentation.di.appDi.ForApplication
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -25,12 +26,12 @@ class NetworkModule(baseUrl:String) {
 
     @Singleton
     @Provides
-     fun providesHttpCache(application: Application): Cache? {
+    fun providesHttpCache(@ForApplication appContext: Context): Cache? {
         val cacheSize = 10 * 1024 * 1024
         var cache: Cache? = null
         try {
 
-            val myDir = File(application.cacheDir, "response")
+            val myDir = File(appContext.cacheDir, "response")
             myDir.mkdir()
             cache = Cache(myDir, cacheSize.toLong())
         } catch (e: Exception) {

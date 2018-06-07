@@ -1,21 +1,27 @@
 package com.tripl3dev.dataStore.posts
 
+import android.util.Log
 import com.tripl3dev.domain.Entity.PostEntity
-import com.tripl3dev.domain.managers.CasheUtil
 import com.tripl3dev.domain.businessLogic.dataLogic.postsLogic.PostsCasheI
-import io.reactivex.*
+import com.tripl3dev.domain.managers.CasheUtil
+import io.reactivex.Completable
+import io.reactivex.Single
+import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
+class PostsCasheImp @Inject constructor() : PostsCasheI {
 
-class PostsCasheImp : PostsCasheI {
-
-    var postsSingle: ArrayList<PostEntity> = ArrayList()
     var isCashed: Boolean = false
         get() = postsSingle.isNotEmpty()
     private var mLastCacheTime: Long = 0
 
+    var postsSingle: ArrayList<PostEntity> = ArrayList()
+
 
     override fun savePosts(posts: ArrayList<PostEntity>) {
         Completable.create {
+            postsSingle.clear()
             postsSingle.addAll(posts)
             it.onComplete()
         }.subscribe({
@@ -26,6 +32,7 @@ class PostsCasheImp : PostsCasheI {
 
 
     override fun getPosts(): Single<ArrayList<PostEntity>> {
+        Log.e("PostsCashe", "DataFromCashe")
         return Single.just(postsSingle)
     }
 

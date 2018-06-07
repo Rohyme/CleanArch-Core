@@ -7,6 +7,7 @@ import com.tripl3dev.presentation.di.appDi.DaggerApplicationComponent
 import com.tripl3dev.presentation.di.networkDi.DaggerNetworkComponent
 import com.tripl3dev.presentation.di.networkDi.NetworkComponent
 import com.tripl3dev.presentation.di.networkDi.NetworkModule
+import com.tripl3dev.prettystates.StatesConfigFactory
 
 class MyApplication : Application() {
 
@@ -15,13 +16,14 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         appComponent = DaggerApplicationComponent.builder()
-                .applicationModule(ApplicationModule())
+                .applicationModule(ApplicationModule(this))
                 .applicationContext(this)
                 .builder()
         networkComponent = DaggerNetworkComponent.builder()
-                .appModule(ApplicationModule())
-                .networkModule(NetworkModule("https://jsonplaceholder.typicode.com"))
+                .appModule(ApplicationModule(this))
+                .networkModule(NetworkModule("https://jsonplaceholder.typicode.com/"))
                 .builder()
+        StatesConfigFactory.intialize().initDefaultViews(this)
 
 
     }

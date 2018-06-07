@@ -19,6 +19,7 @@ abstract class SingleUseCase<T, in params> constructor(
 
 
     open fun execute(singleObserver: DisposableSingleObserver<T>, params: params? = null) {
+
         val single = this.buildUseCaseObservable(params)
                 .subscribeOn(subscribeOnScheduler.getSubscribtionOnScheduler())
                 .observeOn(oberserveOnScheduler.getObserveOnScheduler()) as Single<T>

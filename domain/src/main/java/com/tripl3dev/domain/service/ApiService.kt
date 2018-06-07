@@ -6,7 +6,7 @@ import retrofit2.http.GET
 
 interface ApiService {
 
-    @GET("/post")
+    @GET("posts")
     fun getPosts(): Single<ArrayList<PostEntity>>
 
 }
