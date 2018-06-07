@@ -24,6 +24,7 @@ class RepositoriesModule {
     @Provides
     fun provideSubscribtionOnScheduler(scheduler: DefaultSubscribeScheduler): SubscribtionOnScheduler {
         return scheduler
+
     }
 }
 
