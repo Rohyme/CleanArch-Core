@@ -43,3 +43,4 @@ dependencies {
     api libs.roomRx
     kapt libs.roomAnnotation
 }
+

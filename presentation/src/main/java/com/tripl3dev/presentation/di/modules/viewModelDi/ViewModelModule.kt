@@ -3,6 +3,7 @@ package com.tripl3dev.presentation.di.modules.viewModelDi
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.tripl3dev.presentation.ui.MainActivityViewModel
+import com.tripl3dev.presentation.ui.login.GuestSessionVM
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -33,5 +34,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(MainActivityViewModel::class)
     internal abstract fun postListViewModel(viewModel: MainActivityViewModel): ViewModel
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(GuestSessionVM::class)
+    internal abstract fun GuestSessionViewModel(viewModel: GuestSessionVM): ViewModel
 
 }

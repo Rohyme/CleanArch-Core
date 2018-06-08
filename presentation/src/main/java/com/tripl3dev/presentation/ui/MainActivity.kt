@@ -3,34 +3,30 @@ package com.tripl3dev.presentation.ui
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.tripl3dev.domain.Entity.PostEntity
 import com.tripl3dev.domain.managers.Stateview
 import com.tripl3dev.presentation.R
-import com.tripl3dev.presentation.application.MyApplication
-import com.tripl3dev.presentation.base.BaseActivity
-import com.tripl3dev.presentation.di.modules.viewModelDi.ViewModelFactory
+import com.tripl3dev.presentation.base.BaseActivityWithInjector
 import kotlinx.android.synthetic.main.activity_main.*
-import javax.inject.Inject
 
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivityWithInjector() {
+    override fun getActivityVM(): Class<MainActivityViewModel> {
 
-    @Inject
-    lateinit var factory: ViewModelFactory
+        return MainActivityViewModel::class.java
+    }
+
 
     var isLoading: LiveData<Boolean> = MutableLiveData()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        (application as MyApplication).networkComponent.inject(this)
-
-        val vm = ViewModelProviders.of(this, factory)[MainActivityViewModel::class.java]
-        vm.getShowPostUpdated().observe(this, Observer<Stateview> { t ->
+        val myViewModel = vm as MainActivityViewModel
+        myViewModel.getShowPostUpdated().observe(this, Observer<Stateview> { t ->
             if (t !is Stateview.Loading) {
                 progress.visibility = View.GONE
                 testText.visibility = View.VISIBLE

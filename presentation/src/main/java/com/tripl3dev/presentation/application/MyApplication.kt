@@ -1,6 +1,7 @@
 package com.tripl3dev.presentation.application
 
 import android.app.Application
+import com.tripl3dev.domain.managers.Constants
 import com.tripl3dev.presentation.di.components.ApplicationComponent
 import com.tripl3dev.presentation.di.components.DaggerApplicationComponent
 import com.tripl3dev.presentation.di.components.DaggerNetworkComponent
@@ -19,7 +20,7 @@ class MyApplication : Application() {
                 .builder()
         networkComponent = DaggerNetworkComponent.builder()
                 .application(this)
-                .baseUrl("https://jsonplaceholder.typicode.com/")
+                .baseUrl(Constants.BASE_URL)
                 .builder()
 
     }
