@@ -1,4 +1,4 @@
-package com.tripl3dev.presentation.di.appDi
+package com.tripl3dev.presentation.di.qualifiers
 
 import javax.inject.Qualifier
 

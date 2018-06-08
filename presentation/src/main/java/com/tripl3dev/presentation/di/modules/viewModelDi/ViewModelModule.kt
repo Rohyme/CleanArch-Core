@@ -1,8 +1,8 @@
-package com.tripl3dev.presentation.di.viewModelDi
+package com.tripl3dev.presentation.di.modules.viewModelDi
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.tripl3dev.presentation.MainActivityViewModel
+import com.tripl3dev.presentation.ui.MainActivityViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module

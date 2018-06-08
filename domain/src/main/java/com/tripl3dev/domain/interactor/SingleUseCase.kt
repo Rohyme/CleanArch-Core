@@ -27,11 +27,12 @@ abstract class SingleUseCase<T, in params> constructor(
     }
 
 
-    fun dispose() {
+    fun unSubscribe() {
         if (!disposables.isDisposed) disposables.dispose()
     }
 
     fun addDisposable(disposable: Disposable) {
         disposables.add(disposable)
     }
+
 }

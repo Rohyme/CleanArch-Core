@@ -1,4 +1,4 @@
-package com.tripl3dev.presentation.di.dataBaseDi
+package com.tripl3dev.presentation.di.modules.dataBaseDi
 
 import android.arch.persistence.room.Room
 import com.tripl3dev.dataStore.posts.PostsDao

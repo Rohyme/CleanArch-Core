@@ -3,7 +3,7 @@ package com.tripl3dev.domain.interactor
 import io.reactivex.observers.DisposableSingleObserver
 import retrofit2.HttpException
 
-class CustomSingleObserver<T>(val singleObserverImp: SingleObserverCB<T>) : DisposableSingleObserver<T>() {
+class CustomSingleObserver<T>(private val singleObserverImp: SingleObserverCB<T>) : DisposableSingleObserver<T>() {
     override fun onSuccess(t: T) {
         if (t is AbstractList<*>) {
             if (t.isEmpty()) {

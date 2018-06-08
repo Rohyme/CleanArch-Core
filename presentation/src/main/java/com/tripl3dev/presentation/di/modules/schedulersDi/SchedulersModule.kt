@@ -1,7 +1,5 @@
-package com.tripl3dev.presentation.di.repositoriesDi
+package com.tripl3dev.presentation.di.modules.schedulersDi
 
-import com.tripl3dev.dataStore.posts.PostsRepositoryImp
-import com.tripl3dev.domain.businessLogic.dataLogic.postsLogic.PostsRepositoryI
 import com.tripl3dev.domain.executer.ObserveOnScheduler
 import com.tripl3dev.domain.executer.SubscribtionOnScheduler
 import com.tripl3dev.schedulers.DefaultObserveScheduler
@@ -10,11 +8,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class RepositoriesModule {
-    @Provides
-    fun providePostsRepositoryI(postsRepository: PostsRepositoryImp): PostsRepositoryI {
-        return postsRepository
-    }
+class SchedulersModule {
 
     @Provides
     fun provideObserveOnScheduler(scheduler: DefaultObserveScheduler): ObserveOnScheduler {
@@ -24,7 +18,5 @@ class RepositoriesModule {
     @Provides
     fun provideSubscribtionOnScheduler(scheduler: DefaultSubscribeScheduler): SubscribtionOnScheduler {
         return scheduler
-
     }
 }
-

@@ -1,7 +1,8 @@
-package com.tripl3dev.presentation.di.appDi
+package com.tripl3dev.presentation.di.modules.appDi
 
 import android.content.Context
 import com.tripl3dev.presentation.application.MyApplication
+import com.tripl3dev.presentation.di.qualifiers.ForApplication
 import dagger.Module
 import dagger.Provides
 

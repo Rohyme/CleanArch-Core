@@ -1,4 +1,4 @@
-package com.tripl3dev.presentation
+package com.tripl3dev.presentation.ui
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -19,7 +19,6 @@ class MainActivityViewModel @Inject constructor(val postsUseCase: ShowPostsUseCa
     }
 
     fun updatePostsList() {
-//        showPosts.postValue(Stateview.Loading(true))
         postsUseCase.execute(CustomSingleObserver(object : SingleObserverCB<ArrayList<PostEntity>> {
             override fun onSuccess(t: ArrayList<PostEntity>) {
                 showPosts.postValue(Stateview.Success(t))
@@ -47,23 +46,14 @@ class MainActivityViewModel @Inject constructor(val postsUseCase: ShowPostsUseCa
             }
         }))
     }
-/*
-    object : DisposableSingleObserver<ArrayList<PostEntity>>() {
-        override fun onSuccess(t: ArrayList<PostEntity>) {
-            if (t.isEmpty()) showPosts.postValue(Stateview.HasNoData(true))
-            else showPosts.postValue(Stateview.Success(t))
-        }
-        override fun onError(e: Throwable) {
-            showPosts.postValue(Stateview.Failure(e))
-            if (e is HttpException) {
-                showPosts.postValue(Stateview.ServiceError(e.code()))
-            } else
-                showPosts.postValue(Stateview.Failure(e))
-        }
 
-    }*/
 
     fun getShowPostUpdated(): LiveData<Stateview> {
         return showPosts
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        postsUseCase.unSubscribe()
     }
 }

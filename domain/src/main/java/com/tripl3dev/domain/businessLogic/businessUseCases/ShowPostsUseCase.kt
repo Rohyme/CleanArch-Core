@@ -9,8 +9,8 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 class ShowPostsUseCase @Inject constructor(val repository: PostsRepositoryI,
-                                           private val observeOnScheduler: ObserveOnScheduler,
-                                           private val subscribeScheduler: SubscribtionOnScheduler)
+                                           observeOnScheduler: ObserveOnScheduler,
+                                           subscribeScheduler: SubscribtionOnScheduler)
     : SingleUseCase<ArrayList<PostEntity>, Void>(observeOnScheduler, subscribeScheduler) {
 
     override fun buildUseCaseObservable(params: Void?): Single<ArrayList<PostEntity>> {

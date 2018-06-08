@@ -1,11 +1,11 @@
-package com.tripl3dev.presentation.di.networkDi
+package com.tripl3dev.presentation.di.modules.networkDi
 
 import android.content.Context
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.tripl3dev.domain.service.ApiService
-import com.tripl3dev.presentation.di.appDi.ForApplication
+import com.tripl3dev.presentation.di.qualifiers.ForApplication
 import dagger.Module
 import dagger.Provides
 import okhttp3.Cache
@@ -20,7 +20,6 @@ import javax.inject.Singleton
 
 @Module
 class NetworkModule() {
-
 
 
     @Singleton
@@ -42,7 +41,7 @@ class NetworkModule() {
 
     @Singleton
     @Provides
-     fun providesGson(): Gson {
+    fun providesGson(): Gson {
         val gsonBuilder = GsonBuilder()
         gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
         return gsonBuilder.create()
@@ -50,7 +49,7 @@ class NetworkModule() {
 
     @Singleton
     @Provides
-     fun provideOkhttpClient(cache: Cache?): OkHttpClient {
+    fun provideOkhttpClient(cache: Cache?): OkHttpClient {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
@@ -75,7 +74,7 @@ class NetworkModule() {
 
     @Singleton
     @Provides
-     fun providesApiService(retrofit: Retrofit): ApiService {
+    fun providesApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
     }
 

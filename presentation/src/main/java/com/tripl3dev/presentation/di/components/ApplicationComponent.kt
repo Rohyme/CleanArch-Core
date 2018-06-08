@@ -1,7 +1,7 @@
 package com.tripl3dev.presentation.di.components
 
 import com.tripl3dev.presentation.application.MyApplication
-import com.tripl3dev.presentation.di.appDi.ApplicationModule
+import com.tripl3dev.presentation.di.modules.appDi.ApplicationModule
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton

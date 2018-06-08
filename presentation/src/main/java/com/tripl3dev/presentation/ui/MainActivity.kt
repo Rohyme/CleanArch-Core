@@ -1,4 +1,4 @@
-package com.tripl3dev.presentation
+package com.tripl3dev.presentation.ui
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -9,9 +9,10 @@ import android.view.View
 import android.widget.Toast
 import com.tripl3dev.domain.Entity.PostEntity
 import com.tripl3dev.domain.managers.Stateview
+import com.tripl3dev.presentation.R
 import com.tripl3dev.presentation.application.MyApplication
 import com.tripl3dev.presentation.base.BaseActivity
-import com.tripl3dev.presentation.di.viewModelDi.ViewModelFactory
+import com.tripl3dev.presentation.di.modules.viewModelDi.ViewModelFactory
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
