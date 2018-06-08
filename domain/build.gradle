@@ -18,6 +18,9 @@ dependencies {
     api libs.dagger2
     api libs.daggerSupport
     kapt libs.daggerAnnotationProcess
+    api libs.room
+    api libs.roomRx
+    kapt libs.roomAnnotation
 }
 
 sourceCompatibility = "1.7"

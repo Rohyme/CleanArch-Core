@@ -19,9 +19,8 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-class NetworkModule(baseUrl:String) {
+class NetworkModule() {
 
-    var BASE_URL =baseUrl
 
 
     @Singleton
@@ -65,11 +64,11 @@ class NetworkModule(baseUrl:String) {
 
     @Singleton
     @Provides
-     fun providesRetrofit(gson: Gson, okHttpClient: OkHttpClient): Retrofit {
+    fun providesRetrofit(gson: Gson, okHttpClient: OkHttpClient, baseUrl: String): Retrofit {
         return Retrofit.Builder()
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .baseUrl(BASE_URL)
+                .baseUrl(baseUrl)
                 .client(okHttpClient)
                 .build()
     }

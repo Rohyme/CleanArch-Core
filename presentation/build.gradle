@@ -49,5 +49,8 @@ dependencies {
     api libs.okhttp
     api libs.gson
     api libs.gsonConverter
+    implementation libs.room
+    implementation libs.roomRx
+    kapt libs.roomAnnotation
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
 }

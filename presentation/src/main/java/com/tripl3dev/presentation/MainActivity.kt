@@ -5,20 +5,18 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.Toast
 import com.tripl3dev.domain.Entity.PostEntity
 import com.tripl3dev.domain.managers.Stateview
-import com.tripl3dev.domain.service.ApiService
 import com.tripl3dev.presentation.application.MyApplication
+import com.tripl3dev.presentation.base.BaseActivity
 import com.tripl3dev.presentation.di.viewModelDi.ViewModelFactory
+import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity() {
-   @Inject
-   lateinit var  apiService : ApiService
+class MainActivity : BaseActivity() {
 
     @Inject
     lateinit var factory: ViewModelFactory
@@ -44,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 is Stateview.HasNoData -> {
-                    Toast.makeText(this@MainActivity, "No data Fount ya 3m el 7ag", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, "No data Found ya 3m el 7ag", Toast.LENGTH_SHORT).show()
                 }
 
                 is Stateview.Failure -> {

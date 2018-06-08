@@ -6,25 +6,27 @@ import com.tripl3dev.domain.businessLogic.dataLogic.postsLogic.PostsCasheI
 import com.tripl3dev.domain.managers.CasheUtil
 import io.reactivex.Completable
 import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class PostsCasheImp @Inject constructor() : PostsCasheI {
+class PostsCasheImp @Inject constructor(val dataBase: PostsDao) : PostsCasheI {
 
-    var isCashed: Boolean = false
-        get() = postsSingle.isNotEmpty()
+    private var isCashed: Boolean = false
     private var mLastCacheTime: Long = 0
 
-    var postsSingle: ArrayList<PostEntity> = ArrayList()
 
 
     override fun savePosts(posts: ArrayList<PostEntity>) {
         Completable.create {
-            postsSingle.clear()
-            postsSingle.addAll(posts)
+            dataBase.clearCachedPosts()
+            dataBase.savePosts(posts)
             it.onComplete()
-        }.subscribe({
+        }.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
             setLastCacheTime(System.currentTimeMillis())
             isCashed = true
         })
@@ -33,7 +35,8 @@ class PostsCasheImp @Inject constructor() : PostsCasheI {
 
     override fun getPosts(): Single<ArrayList<PostEntity>> {
         Log.e("PostsCashe", "DataFromCashe")
-        return Single.just(postsSingle)
+        return dataBase.getPosts().map { ArrayList(it) }
+
     }
 
 
@@ -46,6 +49,6 @@ class PostsCasheImp @Inject constructor() : PostsCasheI {
     }
 
     override fun isExpired(): Boolean {
-        return !(isCashed && (System.currentTimeMillis() - mLastCacheTime) < CasheUtil.CASHE_TIME)
+        return (isCashed && (System.currentTimeMillis() - mLastCacheTime) > CasheUtil.CASHE_TIME)
     }
 }

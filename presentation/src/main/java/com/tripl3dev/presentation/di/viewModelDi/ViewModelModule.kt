@@ -34,5 +34,4 @@ abstract class ViewModelModule {
     @ViewModelKey(MainActivityViewModel::class)
     internal abstract fun postListViewModel(viewModel: MainActivityViewModel): ViewModel
 
-    //Add more ViewModels here
 }

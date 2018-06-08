@@ -6,11 +6,11 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class ApplicationModule(val app: MyApplication) {
+class ApplicationModule {
 
     @Provides
     @ForApplication
-    fun applicationContext(): Context {
+    fun applicationContext(app: MyApplication): Context {
         return app.applicationContext
     }
 

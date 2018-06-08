@@ -39,4 +39,7 @@ dependencies {
     implementation 'com.github.FrangSierra:RxFirebase:1.5.0'
     implementation 'com.f2prateek.rx.preferences2:rx-preferences:2.0.0'
     implementation project(':domain')
+    api libs.room
+    api libs.roomRx
+    kapt libs.roomAnnotation
 }
