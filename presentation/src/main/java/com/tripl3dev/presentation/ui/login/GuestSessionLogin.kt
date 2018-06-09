@@ -7,7 +7,7 @@ import com.tripl3dev.domain.managers.Stateview
 import com.tripl3dev.presentation.R
 import com.tripl3dev.presentation.base.BaseActivityWithInjector
 import com.tripl3dev.presentation.base.BaseViewModel
-import com.tripl3dev.presentation.ui.mainScreen.MainScreen
+import com.tripl3dev.presentation.ui.MainScreenActivity
 import com.tripl3dev.prettystates.StatesConstants
 import com.tripl3dev.prettystates.setState
 import kotlinx.android.synthetic.main.activity_guest_session_login.*
@@ -33,7 +33,7 @@ class GuestSessionLogin : BaseActivityWithInjector() {
             when (t) {
                 is Stateview.Success<*> -> {
                     loginBt.setState(StatesConstants.NORMAL_STATE)
-                    MainScreen.navigateToMainScreen(this@GuestSessionLogin)
+                    MainScreenActivity.navigateToMainScreen(this@GuestSessionLogin)
                     Toast.makeText(this, "Guest has login successfully", Toast.LENGTH_SHORT).show()
                 }
                 is Stateview.Loading -> {
@@ -47,7 +47,7 @@ class GuestSessionLogin : BaseActivityWithInjector() {
 
         viewModel.isLoggedIn().observe(this, Observer<Boolean> {
             if (it!!) {
-                MainScreen.navigateToMainScreen(this)
+                MainScreenActivity.navigateToMainScreen(this)
                 finish()
             }
         })

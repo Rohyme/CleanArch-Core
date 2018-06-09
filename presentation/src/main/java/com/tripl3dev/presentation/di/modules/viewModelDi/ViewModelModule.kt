@@ -4,6 +4,9 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.tripl3dev.presentation.ui.MainActivityViewModel
 import com.tripl3dev.presentation.ui.login.GuestSessionVM
+import com.tripl3dev.presentation.ui.moviesScreen.MoviesVM
+import com.tripl3dev.presentation.ui.peopleScreen.PeopleVM
+import com.tripl3dev.presentation.ui.tvShowsScreen.TVShowsVM
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -40,5 +43,20 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(GuestSessionVM::class)
     internal abstract fun GuestSessionViewModel(viewModel: GuestSessionVM): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MoviesVM::class)
+    internal abstract fun MoviesViewModel(viewModel: MoviesVM): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(PeopleVM::class)
+    internal abstract fun PeopleViewModel(viewModel: PeopleVM): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TVShowsVM::class)
+    internal abstract fun TvShowsViewModel(viewModel: TVShowsVM): ViewModel
 
 }
