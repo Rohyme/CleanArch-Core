@@ -17,7 +17,7 @@ class LoginCacheImp @Inject constructor(val sharedPreferences: SharedPreferenceU
     }
 
     override fun isCached(): Boolean {
-        return sharedPreferences.getGuestData() != null && (System.currentTimeMillis() - (sharedPreferences.getGuestData()?.expiredAt?.getDateInMilliSeconds())!!) > 0
+        return sharedPreferences.getGuestData() != null && ((sharedPreferences.getGuestData()?.expiredAt?.getDateInMilliSeconds())!! - System.currentTimeMillis()) > 0
     }
 
     override fun setLastCacheTime(lastCache: Long) {
@@ -26,4 +26,12 @@ class LoginCacheImp @Inject constructor(val sharedPreferences: SharedPreferenceU
     override fun isExpired(): Boolean {
         return true
     }
+
+    override fun checkUserLoggedIn(): Single<Boolean>? {
+        return if (isCached())
+            Single.just(true)
+        else
+            Single.just(false)
+    }
+
 }

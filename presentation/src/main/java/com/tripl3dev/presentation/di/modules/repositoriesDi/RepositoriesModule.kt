@@ -2,21 +2,23 @@ package com.tripl3dev.presentation.di.modules.repositoriesDi
 
 import com.tripl3dev.dataStore.login.LoginRepositoryImp
 import com.tripl3dev.dataStore.posts.PostsRepositoryImp
-import com.tripl3dev.domain.businessLogic.dataLogic.loginLogic.LoginRepository
+import com.tripl3dev.domain.businessLogic.dataLogic.loginLogic.LoginRepositoryI
 import com.tripl3dev.domain.businessLogic.dataLogic.postsLogic.PostsRepositoryI
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 
 @Module
-abstract class RepositoriesModule {
+class RepositoriesModule {
+    @Provides
+    fun providePostsRepositoryI(postsRepository: PostsRepositoryImp): PostsRepositoryI {
+        return postsRepository
+    }
 
 
-    @Binds
-    abstract fun providePostsRepositoryI(postsRepository: PostsRepositoryImp): PostsRepositoryI
-
-
-    @Binds
-    abstract fun provideLoginRepositoryI(loginRepo: LoginRepositoryImp): LoginRepository
+    @Provides
+    fun provideLoginRepositoryI(postsRepository: LoginRepositoryImp): LoginRepositoryI {
+        return postsRepository
+    }
 
 
 }

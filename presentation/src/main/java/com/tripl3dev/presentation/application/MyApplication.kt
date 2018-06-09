@@ -6,6 +6,7 @@ import com.tripl3dev.presentation.di.components.ApplicationComponent
 import com.tripl3dev.presentation.di.components.DaggerApplicationComponent
 import com.tripl3dev.presentation.di.components.DaggerNetworkComponent
 import com.tripl3dev.presentation.di.components.NetworkComponent
+import com.tripl3dev.prettystates.StatesConfigFactory
 
 
 class MyApplication : Application() {
@@ -22,6 +23,8 @@ class MyApplication : Application() {
                 .application(this)
                 .baseUrl(Constants.BASE_URL)
                 .builder()
+
+        StatesConfigFactory.intialize().initDefaultViews(this)
 
     }
 }

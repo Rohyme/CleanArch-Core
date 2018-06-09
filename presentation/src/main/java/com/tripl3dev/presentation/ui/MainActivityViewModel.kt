@@ -37,11 +37,11 @@ class MainActivityViewModel @Inject constructor(val postsUseCase: ShowPostsUseCa
             }
 
             override fun onEmptyList() {
-                showPosts.postValue(Stateview.HasNoData(true))
+                showPosts.postValue(Stateview.HasNoData)
             }
 
             override fun onSubscribe() {
-                showPosts.postValue(Stateview.Loading(true))
+                showPosts.postValue(Stateview.Loading)
 
             }
         }))
