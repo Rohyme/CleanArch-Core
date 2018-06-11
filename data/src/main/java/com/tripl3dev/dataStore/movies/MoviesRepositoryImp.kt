@@ -1,5 +1,6 @@
 package com.tripl3dev.dataStore.movies
 
+import android.arch.persistence.room.EmptyResultSetException
 import com.tripl3dev.domain.Entity.MoviesEntity
 import com.tripl3dev.domain.businessLogic.dataLogic.moviesLogic.MoviesRepositoryI
 import io.reactivex.Single
@@ -12,30 +13,42 @@ class MoviesRepositoryImp @Inject constructor(val factory: MoviesDataStoreFactor
         const val LATEST_MOVIES = -11
     }
 
-    override fun getLatestMovies(): Single<MoviesEntity> {
-        return Single.concat(factory.retrieveCasheDataStore().getLatestMovies(), factory.retrieveRemoteDataStore().getLatestMovies()).first(MoviesEntity())
+    override fun getLatestMovies(pageNum: Int): Single<MoviesEntity> {
+        return factory.retrieveCasheDataStore().getLatestMovies(pageNum)
+                .onErrorResumeNext {
+                    if (it is EmptyResultSetException) {
+                        return@onErrorResumeNext factory.retrieveRemoteDataStore().getLatestMovies(pageNum).doOnSuccess {
+                            factory.retrieveCasheDataStore().saveLatestMovies(it)
+                        }
+                    }
+                    return@onErrorResumeNext Single.error(it)
+                }
     }
 
     override fun getPopularMovies(pageNum: Int): Single<MoviesEntity> {
-        return if (isCached(pageNum, LATEST_MOVIES)) {
-            factory.retrieveCasheDataStore().getPopularMovies(pageNum)
-        } else {
-            factory.retrieveRemoteDataStore().getPopularMovies(pageNum)
-                    .doOnSuccess {
-                        factory.retrieveCasheDataStore().savePopularMovies(it)
+        return factory.retrieveCasheDataStore().getPopularMovies(pageNum)
+                .onErrorResumeNext {
+                    if (it is EmptyResultSetException) {
+                        return@onErrorResumeNext factory.retrieveRemoteDataStore().getPopularMovies(pageNum).doOnSuccess {
+                            factory.retrieveCasheDataStore().savePopularMovies(it)
+                        }
                     }
-        }
+                    return@onErrorResumeNext Single.error(it)
+                }
+
+
     }
 
     override fun getTopRatedMovies(pageNum: Int): Single<MoviesEntity> {
-        return if (isCached(pageNum, TOP_RATED_MOVIES)) {
-            factory.retrieveCasheDataStore().getTopRatedMovies(pageNum)
-        } else {
-            factory.retrieveRemoteDataStore().getTopRatedMovies(pageNum)
-                    .doOnSuccess {
-                        factory.retrieveCasheDataStore().saveTopRatedMovies(it)
+        return factory.retrieveCasheDataStore().getTopRatedMovies(pageNum)
+                .onErrorResumeNext {
+                    if (it is EmptyResultSetException) {
+                        return@onErrorResumeNext factory.retrieveRemoteDataStore().getTopRatedMovies(pageNum).doOnSuccess {
+                            factory.retrieveCasheDataStore().saveTopRatedMovies(it)
+                        }
                     }
-        }
+                    return@onErrorResumeNext Single.error(it)
+                }
     }
 
     fun isCached(pageNum: Int, moviesType: Int): Boolean {

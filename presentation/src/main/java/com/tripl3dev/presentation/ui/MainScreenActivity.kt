@@ -45,6 +45,9 @@ class MainScreenActivity : AppCompatActivity() {
                 drawer_layout.openDrawer(Gravity.START)
                 return true
             }
+            R.id.filterMovies -> {
+                return false
+            }
         }
         return super.onOptionsItemSelected(item)
     }

@@ -8,8 +8,8 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 class MoviesRemoteImp @Inject constructor(val service: ApiService) : MoviesRemoteI {
-    override fun getLatestMovies(): Single<MoviesEntity> {
-        return service.getLatestMovies(Constants.MOVIES_API_TOKEN)
+    override fun getLatestMovies(pageNum: Int): Single<MoviesEntity> {
+        return service.getLatestMovies(Constants.MOVIES_API_TOKEN, pageNum)
     }
 
     override fun getPopularMovies(pageNum: Int): Single<MoviesEntity> {

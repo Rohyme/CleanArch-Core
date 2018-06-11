@@ -33,7 +33,7 @@ class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMov
     }
 
 
-    fun fetchLatestMovies() {
+    fun fetchLatestMovies(pageNum: Int) {
         latestMoviesUseCase.execute(CustomSingleObserver(object : SingleObserverCB<MoviesEntity> {
             override fun onSuccess(t: MoviesEntity) {
                 latestMovies.postValue(Stateview.Success(t.moviesList))
@@ -49,7 +49,7 @@ class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMov
                 latestMovies.postValue(Stateview.Failure(e))
 
             }
-        }))
+        }), pageNum)
     }
 
     fun fetchPopularMovies(pageNum: Int) {

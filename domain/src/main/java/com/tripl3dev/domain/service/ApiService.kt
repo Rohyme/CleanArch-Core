@@ -13,17 +13,17 @@ interface ApiService {
     fun getPosts(): Single<ArrayList<PostEntity>>
 
 
-    @GET("authentication/guest_session/new")
+    @GET("/3/authentication/guest_session/new")
     fun getGuestToken(@Query("api_key") apiToken: String): Single<GuestEntity>
 
 
-    @GET("/movie/popular")
+    @GET("/3/movie/popular")
     fun getPopularMovies(@Query("api_key") apiToken: String, @Query("page") pageNum: Int): Single<MoviesEntity>
 
-    @GET("/movie/top_rated")
+    @GET("/3/movie/top_rated")
     fun getTopRatedMovies(@Query("api_key") apiToken: String, @Query("page") pageNum: Int): Single<MoviesEntity>
 
-    @GET("/movie/latest")
-    fun getLatestMovies(@Query("api_key") apiToken: String): Single<MoviesEntity>
+    @GET("/3/movie/now_playing")
+    fun getLatestMovies(@Query("api_key") apiToken: String, @Query("page") pageNum: Int): Single<MoviesEntity>
 
 }

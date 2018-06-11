@@ -6,12 +6,14 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/textError"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/state_some_thing_went_wrong" />
 
     <Button
+        android:id="@+id/textButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

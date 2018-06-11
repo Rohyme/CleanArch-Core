@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 
+
 fun View.setState(stateType: Int): View {
     Log.e("STATE_CHANGED", "State Type  =  $stateType")
     val stateConfig = StatesConfigFactory.instance
@@ -26,6 +27,8 @@ fun View.setState(stateType: Int): View {
                 if (parentView is LinearLayout) {
                     parentView.addView(stateView, parentView.indexOfChild(this))
                 } else {
+                    if (stateView.parent != null)
+                        (stateView.parent as ViewGroup).removeView(stateView) // <- fix
                     parentView.addView(stateView)
                 }
             } else {

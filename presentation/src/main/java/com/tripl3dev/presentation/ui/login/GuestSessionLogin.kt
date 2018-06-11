@@ -48,7 +48,6 @@ class GuestSessionLogin : BaseActivityWithInjector() {
         viewModel.isLoggedIn().observe(this, Observer<Boolean> {
             if (it!!) {
                 MainScreenActivity.navigateToMainScreen(this)
-                finish()
             }
         })
 
