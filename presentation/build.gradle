@@ -45,17 +45,24 @@ dependencies {
     implementation libs.daggerSupport
     kapt libs.daggerAnnotationProcess
     kapt libs.daggerCompiler
-    api libs.rxAndroid
-    api libs.retrofit
-    api libs.retrofitRxAdapter
-    api libs.okhttp
-    api libs.gson
-    api libs.gsonConverter
+    implementation libs.rxAndroid
+    implementation libs.retrofit
+    implementation libs.retrofitRxAdapter
+    implementation libs.okhttp
+    implementation libs.gson
+    implementation libs.gsonConverter
     implementation libs.room
     implementation libs.roomRx
     kapt libs.roomAnnotation
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
     implementation project(':prettystates')
     implementation 'com.android.support:design:27.1.1'
+    implementation libs.paging
+    testImplementation libs.pagingTest
+    implementation libs.pagingRx
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.intuit.sdp:sdp-android:1.0.5'
+    implementation 'com.intuit.ssp:ssp-android:1.0.5'
 
 }

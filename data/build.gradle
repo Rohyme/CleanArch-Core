@@ -42,5 +42,9 @@ dependencies {
     api libs.room
     api libs.roomRx
     kapt libs.roomAnnotation
+    implementation libs.paging
+    testImplementation libs.pagingTest
+    implementation libs.pagingRx
+
 }
 

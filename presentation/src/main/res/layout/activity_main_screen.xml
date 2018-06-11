@@ -33,6 +33,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@android:color/white"
+        android:foregroundTint="@drawable/selector_nav_item_text"
+        android:theme="@style/NavigationDrawerStyle"
+        app:headerLayout="@layout/nav_header_layout"
+        app:itemBackground="@drawable/selector_nav_item_bg"
+        app:itemTextColor="@drawable/selector_nav_item_text"
         app:menu="@menu/menu_main_nav" />
 </android.support.v4.widget.DrawerLayout>

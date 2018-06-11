@@ -31,7 +31,11 @@ class MainScreenActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main_screen)
         setSupportActionBar(toolbar)
         setUpNavigationView(nvView)
-
+        selectDrawerItem(nvView.menu.getItem(0))
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_menu)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -46,7 +50,6 @@ class MainScreenActivity : AppCompatActivity() {
     }
 
     fun setUpNavigationView(navigationView: NavigationView) {
-
         navigationView.setNavigationItemSelectedListener {
             selectDrawerItem(it)
             return@setNavigationItemSelectedListener true
@@ -78,6 +81,7 @@ class MainScreenActivity : AppCompatActivity() {
 
         val fragmentManager = supportFragmentManager
         fragmentManager.beginTransaction().replace(R.id.mainScreenContent, fragment).commit()
+        menuItem.isChecked = true
         title = menuItem.title
         drawer_layout.closeDrawers()
     }

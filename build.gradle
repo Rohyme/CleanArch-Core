@@ -22,6 +22,7 @@ buildscript {
         dagger2_version = "2.16"
         retrofit_version="2.3.0"
         room_version ="1.1.0"
+        paging_version = "1.0.0"
         libs = [
                 rxJava: ('io.reactivex.rxjava2:rxjava:' + rxjava_version),
                 rxAndroid: ('io.reactivex.rxjava2:rxandroid:' + rxAndroid_version),
@@ -37,7 +38,13 @@ buildscript {
                 gsonConverter:('com.squareup.retrofit2:converter-gson:2.3.0'),
                 room:('android.arch.persistence.room:runtime:'+ room_version),
                 roomAnnotation:('android.arch.persistence.room:compiler:'+ room_version),
-                roomRx:('android.arch.persistence.room:rxjava2:'+ room_version)
+                roomRx:('android.arch.persistence.room:rxjava2:'+ room_version),
+                paging:('android.arch.paging:runtime:' +paging_version),
+                pagingTest:('android.arch.paging:common:' +paging_version),
+                pagingRx:('android.arch.paging:rxjava2:1.0.0-rc1')
+
+
+
         ]
     }
 
