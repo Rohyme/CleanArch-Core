@@ -9,19 +9,19 @@ import io.reactivex.Single
 
 @Dao
 interface MoviesDao {
-    @Query("SELECT * FROM  movies_table WHERE page = :page AND movies_type = -10")
-    fun getPopularMovies(page: Int): Single<MoviesEntity>
+    @Query("SELECT * FROM  movies_table WHERE page_num = 1 AND movies_type = -10")
+    fun getPopularMovies(): Single<MoviesEntity>
 
-    @Query("SELECT * FROM  movies_table WHERE page = :page AND movies_type = -11")
-    fun getLatestMovies(page: Int): Single<MoviesEntity>
+    @Query("SELECT * FROM  movies_table WHERE page_num = 1 AND movies_type = -11")
+    fun getLatestMovies(): Single<MoviesEntity>
 
-    @Query("SELECT * FROM  movies_table WHERE page = :page AND movies_type = -12")
-    fun getTopRatedMovies(page: Int): Single<MoviesEntity>
+    @Query("SELECT * FROM  movies_table WHERE page_num = 1 AND movies_type = -12")
+    fun getTopRatedMovies(): Single<MoviesEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMoviesList(movies: MoviesEntity)
 
-    @Query("SELECT COUNT(*) FROM movies_table WHERE page =:page AND movies_type =:type ")
+    @Query("SELECT COUNT(*) FROM movies_table WHERE page_num =:page AND movies_type =:type ")
     fun checkMoviesExist(page: Int, type: Int): Int
 
 

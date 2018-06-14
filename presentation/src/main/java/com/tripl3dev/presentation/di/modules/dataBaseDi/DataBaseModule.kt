@@ -1,6 +1,7 @@
 package com.tripl3dev.presentation.di.modules.dataBaseDi
 
 import android.arch.persistence.room.Room
+import android.util.Log
 import com.tripl3dev.dataStore.movies.MoviesDao
 import com.tripl3dev.dataStore.movies.MoviesDb
 import com.tripl3dev.dataStore.posts.PostsDao
@@ -22,7 +23,9 @@ class DataBaseModule {
     @Provides
     @Singleton
     fun provideMoviesDao(appContext: MyApplication): MoviesDao {
-        return Room.databaseBuilder(appContext, MoviesDb::class.java, "movies_db").build().getMoviesDao()
+        val movieDao = Room.databaseBuilder(appContext, MoviesDb::class.java, "movies_db").build().getMoviesDao()
+        Log.e("dataBasePlace", appContext.getDatabasePath("movies_db").absolutePath)
+        return movieDao
     }
 
 }

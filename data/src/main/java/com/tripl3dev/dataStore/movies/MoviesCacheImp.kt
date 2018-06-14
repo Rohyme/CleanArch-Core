@@ -8,47 +8,52 @@ import javax.inject.Inject
 
 class MoviesCacheImp @Inject constructor(val moviesDb: MoviesDao) : MoviesCacheI {
     override fun getLatestMovies(pageNum: Int): Single<MoviesEntity> {
-        Log.e("Cache", "getLatestMoviesFromCache")
-        return moviesDb.getLatestMovies(pageNum).onErrorResumeNext {
+        return moviesDb.getLatestMovies().onErrorResumeNext {
+            Log.e("Cache", "latest is Empty and error is ${it.message}")
             return@onErrorResumeNext Single.error(it)
         }
                 .doOnSuccess {
-                    Log.e("Cache", "getTopRatedFromCache")
+                    Log.e("Cache", "Latest from cache ${it.toString()}")
                 }
     }
 
     override fun savePopularMovies(moviesEntity: MoviesEntity) {
         moviesEntity.MoviesType = MoviesRepositoryImp.POPULAR_MOVIES
+        Log.e("Cache", "Saving Popular $moviesEntity")
         moviesDb.insertMoviesList(moviesEntity)
     }
 
     override fun saveLatestMovies(moviesEntity: MoviesEntity) {
         moviesEntity.MoviesType = MoviesRepositoryImp.LATEST_MOVIES
+        Log.e("Cache", "Saving Latest $moviesEntity")
+
         moviesDb.insertMoviesList(moviesEntity)
     }
 
     override fun saveTopRatedMovies(moviesEntity: MoviesEntity) {
         moviesEntity.MoviesType = MoviesRepositoryImp.TOP_RATED_MOVIES
+        Log.e("Cache", "Saving TopRated $moviesEntity")
         moviesDb.insertMoviesList(moviesEntity)
     }
 
     override fun getPopularMovies(pageNum: Int): Single<MoviesEntity> {
-        Log.e("Cache", "getPopularMoviesFromCache")
-        return moviesDb.getPopularMovies(pageNum).onErrorResumeNext {
+        return moviesDb.getPopularMovies().onErrorResumeNext {
+            Log.e("Cache", "popular is Empty and error is ${it.message}")
             return@onErrorResumeNext Single.error(it)
         }
                 .doOnSuccess {
-                    Log.e("Cache", "getTopRatedFromCache")
+                    Log.e("Cache", "Popular from cache ${it.toString()}")
                 }
     }
 
     override fun getTopRatedMovies(pageNum: Int): Single<MoviesEntity> {
-        return moviesDb.getTopRatedMovies(pageNum)
-                .doOnSuccess {
-                    Log.e("Cache", "getTopRatedFromCache")
-                }
+        return moviesDb.getTopRatedMovies()
                 .onErrorResumeNext {
+                    Log.e("Cache", "topRated is Empty and error is ${it.message}")
                     return@onErrorResumeNext Single.error(it)
+                }
+                .doOnSuccess {
+                    Log.e("Cache", "topRated from cache ${it.toString()}")
                 }
     }
 

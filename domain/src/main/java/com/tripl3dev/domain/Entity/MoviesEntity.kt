@@ -7,12 +7,17 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "movies_table")
 data class MoviesEntity(
-        @PrimaryKey @SerializedName("page") var page: Int = 1,
+
+        @ColumnInfo(name = "page_num")
+        @SerializedName("page") var page: Int = 1,
         @ColumnInfo(name = "movies_list") @SerializedName("results") var moviesList: List<Movie> = listOf()
 ) {
 
     @ColumnInfo(name = "movies_type")
     var MoviesType: Int = -10
+
+    @PrimaryKey
+    var uniqueId: String = "$MoviesType$page"
 
     data class Movie(
             @SerializedName("poster_path") var posterPath: String = "",

@@ -20,6 +20,7 @@ import com.tripl3dev.presentation.base.baseAdapter.GenericHolder
 import com.tripl3dev.presentation.base.baseAdapter.HolderInterface
 import com.tripl3dev.presentation.base.calculateNoOfColumns
 import com.tripl3dev.presentation.base.loadImage
+import com.tripl3dev.presentation.databinding.FragmentMoviesScreenBinding
 import com.tripl3dev.presentation.databinding.ListItemMovieScreenBinding
 import com.tripl3dev.prettystates.StatesConstants
 import com.tripl3dev.prettystates.setState
@@ -31,6 +32,7 @@ class MoviesFragment : BaseFragmentWithInjector(), HolderInterface {
     var moviesType: MutableLiveData<Int> = MutableLiveData()
     lateinit var viewModel: MoviesVM
     var currentPage = 1
+    lateinit var binding: FragmentMoviesScreenBinding
 
     override fun getHolder(view: ViewGroup?): RecyclerView.ViewHolder {
         return GenericHolder(LayoutInflater.from(context).inflate(R.layout.list_item_movie_screen, view, false))
@@ -55,23 +57,24 @@ class MoviesFragment : BaseFragmentWithInjector(), HolderInterface {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_movies_screen, container, false)
-    }
 
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movies_screen, container, false)
         mAdapter = GenericAdapter(this)
         viewModel = vm as MoviesVM
-        moviesRecycler.layoutManager = GridLayoutManager(context, calculateNoOfColumns(activity!!.applicationContext))
-        moviesRecycler.setHasFixedSize(true)
-        moviesRecycler.adapter = mAdapter
+        binding.moviesRecycler.layoutManager = GridLayoutManager(context, calculateNoOfColumns(activity!!.applicationContext))
+        binding.moviesRecycler.setHasFixedSize(true)
+        binding.moviesRecycler.adapter = mAdapter
         onTypeChangeObserver()
         onLatestMoviesFetched()
         onPopularMoviesFetched()
         onTopRatedMoviesFetched()
         viewModel.fetchLatestMovies(1)
+        return binding.root
+    }
 
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
     }
 
