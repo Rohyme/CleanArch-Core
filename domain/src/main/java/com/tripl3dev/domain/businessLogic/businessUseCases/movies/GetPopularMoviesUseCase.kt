@@ -4,15 +4,15 @@ import com.tripl3dev.domain.Entity.MoviesEntity
 import com.tripl3dev.domain.businessLogic.dataLogic.moviesLogic.MoviesRepositoryI
 import com.tripl3dev.domain.executer.ObserveOnScheduler
 import com.tripl3dev.domain.executer.SubscribtionOnScheduler
-import com.tripl3dev.domain.interactor.SingleUseCase
-import io.reactivex.Single
+import com.tripl3dev.domain.interactor.FlowableUseCase
+import io.reactivex.Flowable
 import javax.inject.Inject
 
 class GetPopularMoviesUseCase @Inject constructor(val repository: MoviesRepositoryI,
                                                   observe: ObserveOnScheduler,
                                                   subscribe: SubscribtionOnScheduler)
-    : SingleUseCase<MoviesEntity, Int>(observe, subscribe) {
-    override fun buildUseCaseObservable(params: Int?): Single<MoviesEntity> {
+    : FlowableUseCase<MoviesEntity, Int>(observe, subscribe) {
+    override fun buildUseCaseObservable(params: Int?): Flowable<MoviesEntity> {
         return repository.getPopularMovies(params!!)
     }
 

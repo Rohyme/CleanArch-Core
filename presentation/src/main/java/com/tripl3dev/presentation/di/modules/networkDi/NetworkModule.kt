@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
-class NetworkModule() {
+class NetworkModule {
 
 
     @Singleton
@@ -53,7 +53,7 @@ class NetworkModule() {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
-                .cache(cache)
+//                .cache(cache)
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .readTimeout(10, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)

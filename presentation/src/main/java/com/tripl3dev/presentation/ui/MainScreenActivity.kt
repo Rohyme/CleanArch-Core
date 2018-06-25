@@ -39,7 +39,6 @@ class MainScreenActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        drawer_layout.openDrawer(Gravity.START)
         when (item?.itemId) {
             android.R.id.home -> {
                 drawer_layout.openDrawer(Gravity.START)
@@ -73,9 +72,6 @@ class MainScreenActivity : AppCompatActivity() {
             else ->
                 MoviesFragment::class.java
         }
-
-
-
         try {
             fragment = fragmentClass.newInstance() as BaseFragmentWithInjector
         } catch (e: Exception) {

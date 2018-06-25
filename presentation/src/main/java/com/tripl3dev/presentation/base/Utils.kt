@@ -6,8 +6,12 @@ import com.squareup.picasso.Picasso
 import com.tripl3dev.domain.managers.Constants
 
 
-fun ImageView.loadImage(imagePath: String) {
-    Picasso.get().load(Constants.IMG_BASEURL + imagePath).into(this)
+fun ImageView.loadImage(imagePath: String?) {
+    Picasso.get().load(if (imagePath != null) {
+        Constants.IMG_BASEURL + imagePath
+    } else {
+        "https://increasify.com.au/wp-content/uploads/2016/08/default-image.png"
+    }).into(this)
 }
 
 fun calculateNoOfColumns(context: Context): Int {

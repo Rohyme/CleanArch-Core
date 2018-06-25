@@ -1,11 +1,12 @@
 package com.tripl3dev.dataStore.movies
 
-import android.arch.persistence.room.EmptyResultSetException
 import com.tripl3dev.domain.Entity.MoviesEntity
 import com.tripl3dev.domain.businessLogic.dataLogic.moviesLogic.MoviesRepositoryI
-import io.reactivex.Single
+import io.reactivex.Flowable
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class MoviesRepositoryImp @Inject constructor(val factory: MoviesDataStoreFactory) : MoviesRepositoryI {
     companion object {
         const val POPULAR_MOVIES = -10
@@ -13,46 +14,33 @@ class MoviesRepositoryImp @Inject constructor(val factory: MoviesDataStoreFactor
         const val LATEST_MOVIES = -11
     }
 
-    override fun getLatestMovies(pageNum: Int): Single<MoviesEntity> {
-        return factory.retrieveCasheDataStore().getLatestMovies(pageNum)
-                .onErrorResumeNext {
-                    if (it is EmptyResultSetException) {
-                        return@onErrorResumeNext factory.retrieveRemoteDataStore().getLatestMovies(pageNum).doOnSuccess {
-                            factory.retrieveCasheDataStore().saveLatestMovies(it)
-                        }
-                    }
-                    return@onErrorResumeNext Single.error(it)
-                }
+    override fun getLatestMovies(pageNum: Int): Flowable<MoviesEntity> {
+        return Flowable.concatArrayDelayError(factory.retrieveCasheDataStore().getLatestMovies(pageNum).toFlowable(),
+                factory.retrieveRemoteDataStore().getLatestMovies(pageNum).toFlowable().doOnNext {
+                    factory.retrieveCasheDataStore().saveLatestMovies(it)
+                }).firstElement().toFlowable()
     }
 
-    override fun getPopularMovies(pageNum: Int): Single<MoviesEntity> {
-        return factory.retrieveCasheDataStore().getPopularMovies(pageNum)
-                .onErrorResumeNext {
-                    if (it is EmptyResultSetException) {
-                        return@onErrorResumeNext factory.retrieveRemoteDataStore().getPopularMovies(pageNum).doOnSuccess {
-                            factory.retrieveCasheDataStore().savePopularMovies(it)
-                        }
-                    }
-                    return@onErrorResumeNext Single.error(it)
-                }
-
-
+    override fun getPopularMovies(pageNum: Int): Flowable<MoviesEntity> {
+        val flowable = Flowable.concatArrayDelayError(factory.retrieveCasheDataStore().getPopularMovies(pageNum).toFlowable(),
+                factory.retrieveRemoteDataStore().getPopularMovies(pageNum).toFlowable().doOnNext {
+                    factory.retrieveCasheDataStore().savePopularMovies(it)
+                }).firstElement().toFlowable()
+//        if (!factory.retrieveCasheDataStore().isExpired(POPULAR_MOVIES))
+//            flowable
+        return flowable
     }
 
-    override fun getTopRatedMovies(pageNum: Int): Single<MoviesEntity> {
-        return factory.retrieveCasheDataStore().getTopRatedMovies(pageNum)
-                .onErrorResumeNext {
-                    if (it is EmptyResultSetException) {
-                        return@onErrorResumeNext factory.retrieveRemoteDataStore().getTopRatedMovies(pageNum).doOnSuccess {
-                            factory.retrieveCasheDataStore().saveTopRatedMovies(it)
-                        }
-                    }
-                    return@onErrorResumeNext Single.error(it)
-                }
+    override fun getTopRatedMovies(pageNum: Int): Flowable<MoviesEntity> {
+        val flowable = Flowable.concatArrayDelayError(factory.retrieveCasheDataStore().getTopRatedMovies(pageNum).toFlowable(),
+                factory.retrieveRemoteDataStore().getTopRatedMovies(pageNum).toFlowable().doOnNext {
+                    factory.retrieveCasheDataStore().saveTopRatedMovies(it)
+                }).firstElement().toFlowable()
+//        if (!factory.retrieveCasheDataStore()./**/isExpired(TOP_RATED_MOVIES))
+//            flowable
+
+        return flowable
     }
 
-    fun isCached(pageNum: Int, moviesType: Int): Boolean {
-        return (factory.retrieveCasheDataStore() as MoviesCacheImp).isMoviedCached(pageNum, moviesType)
-    }
 
 }

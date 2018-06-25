@@ -1,12 +1,12 @@
 package com.tripl3dev.prettystates
 
 import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
+import android.support.annotation.IntegerRes
+import android.util.SparseArray
 
 
 class StatesConfigFactory private constructor() {
-    private var viewsMap: HashMap<Int, View> = HashMap()
+    private var viewsMap: SparseArray<Int> = SparseArray()
 
     init {
     }
@@ -30,12 +30,9 @@ class StatesConfigFactory private constructor() {
 
     }
 
-    fun addStateView(viewStatus: Int, view: View) {
-        viewsMap[viewStatus] = view
-    }
 
-    fun addStateView(viewStatus: Int, customLayout: Int, context: Context) {
-        viewsMap[viewStatus] = LayoutInflater.from(context.applicationContext).inflate(customLayout, null, false)
+    fun addStateView(viewStatus: Int, @IntegerRes customLayout: Int) {
+        viewsMap.put(viewStatus, customLayout)
     }
 
 
@@ -43,8 +40,8 @@ class StatesConfigFactory private constructor() {
         viewsMap.remove(viewStatus)
     }
 
-    fun getStateView(stateType: Int): View {
-        if (viewsMap.contains(stateType)) {
+    fun getStateView(stateType: Int): Int {
+        if (viewsMap.get(stateType) != null) {
             return viewsMap[stateType]!!
         } else {
             throw Throwable("You haven't set stateView with that State Type")
@@ -52,50 +49,35 @@ class StatesConfigFactory private constructor() {
     }
 
     //Init default views
-    fun initDefaultViews(context: Context) {
-        viewsMap[StatesConstants.EMPTY_STATE] = LayoutInflater.from(context.applicationContext).inflate(R.layout.prettystates_default_empty_view, null, false)
-        viewsMap[StatesConstants.ERROR_STATE] = LayoutInflater.from(context.applicationContext).inflate(R.layout.prettystates_default_error_view, null, false)
-        viewsMap[StatesConstants.LOADING_STATE] = LayoutInflater.from(context.applicationContext).inflate(R.layout.prettystates_default_loading_view, null, false)
-        viewsMap[StatesConstants.NORMAL_STATE] = View(context.applicationContext)
+    fun initDefaultViews() {
+        viewsMap.put(StatesConstants.EMPTY_STATE, R.layout.prettystates_default_empty_view)
+        viewsMap.put(StatesConstants.ERROR_STATE, R.layout.prettystates_default_error_view)
+        viewsMap.put(StatesConstants.LOADING_STATE, R.layout.prettystates_default_loading_view)
+        viewsMap.put(StatesConstants.NORMAL_STATE, R.id.state_view_layout)
     }
+
 
     fun initViews(context: Context) {
-        viewsMap[StatesConstants.NORMAL_STATE] = View(context.applicationContext)
+        viewsMap.put(StatesConstants.NORMAL_STATE, R.id.state_view_layout)
     }
 
-    fun init(context: Context) {
-        viewsMap[StatesConstants.NORMAL_STATE] = View(context.applicationContext)
+    fun init() {
+        viewsMap.put(StatesConstants.NORMAL_STATE, R.id.state_view_layout)
     }
 
-    fun setDefaultEmptyView(emptyView: View): StatesConfigFactory {
-        viewsMap[StatesConstants.EMPTY_STATE] = emptyView
+    fun setDefaultEmptyLayout(@IntegerRes emptyLayout: Int): StatesConfigFactory {
+        viewsMap.put(StatesConstants.EMPTY_STATE, emptyLayout)
         return this
     }
 
-    fun setDefaultEmptyView(emptyLayout: Int, context: Context): StatesConfigFactory {
-        viewsMap[StatesConstants.EMPTY_STATE] = LayoutInflater.from(context.applicationContext).inflate(emptyLayout, null, false)
+    fun setDefaultErrorLayout(@IntegerRes errorLayout: Int, context: Context): StatesConfigFactory {
+        viewsMap.put(StatesConstants.ERROR_STATE, errorLayout)
         return this
     }
 
-    fun setDefaultErrorView(errorView: Int, context: Context): StatesConfigFactory {
-        viewsMap[StatesConstants.ERROR_STATE] = LayoutInflater.from(context.applicationContext).inflate(errorView, null, false)
+    fun setDefaultLoadingLayout(@IntegerRes loadingLayout: Int, context: Context): StatesConfigFactory {
+        viewsMap.put(StatesConstants.LOADING_STATE, loadingLayout)
         return this
     }
-
-    fun setDefaultLoadingView(loadingView: Int, context: Context): StatesConfigFactory {
-        viewsMap[StatesConstants.LOADING_STATE] = LayoutInflater.from(context.applicationContext).inflate(loadingView, null, false)
-        return this
-    }
-
-    fun setDefaultErrorView(errorView: View): StatesConfigFactory {
-        viewsMap[StatesConstants.ERROR_STATE] = errorView
-        return this
-    }
-
-    fun setDefaultLoadingView(loadingView: View): StatesConfigFactory {
-        viewsMap[StatesConstants.LOADING_STATE] = loadingView
-        return this
-    }
-
 
 }

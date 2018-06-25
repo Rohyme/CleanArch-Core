@@ -1,13 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/moviesRecycler"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/moviesRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/noInternetFound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_red_dark"
+            android:gravity="center"
+            android:padding="@dimen/_4sdp"
+            android:text="No internet Found"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_8ssp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/connected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_green_dark"
+            android:gravity="center"
+            android:padding="@dimen/_4sdp"
+            android:text="Connected"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_8ssp"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:id="@+id/moviesListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+
+    </LinearLayout>
 </layout>

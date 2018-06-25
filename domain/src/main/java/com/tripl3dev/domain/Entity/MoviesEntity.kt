@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "movies_table")
 data class MoviesEntity(
-
         @ColumnInfo(name = "page_num")
         @SerializedName("page") var page: Int = 1,
         @ColumnInfo(name = "movies_list") @SerializedName("results") var moviesList: List<Movie> = listOf()
@@ -17,7 +16,14 @@ data class MoviesEntity(
     var MoviesType: Int = -10
 
     @PrimaryKey
-    var uniqueId: String = "$MoviesType$page"
+    var uniqueId: String = ""
+
+    fun setMoviesTypeAndId(moviesType: Int) {
+        this.MoviesType = moviesType
+        uniqueId = "$MoviesType$page"
+    }
+
+    var isLocale: Boolean = false
 
     data class Movie(
             @SerializedName("poster_path") var posterPath: String = "",
@@ -36,3 +42,6 @@ data class MoviesEntity(
             @SerializedName("vote_average") var voteAverage: Double = 0.0
     )
 }
+
+
+

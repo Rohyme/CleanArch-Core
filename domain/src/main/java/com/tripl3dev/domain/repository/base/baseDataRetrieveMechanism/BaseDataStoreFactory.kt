@@ -24,7 +24,4 @@ open class BaseDataStoreFactory<out T , out C , out R>(val casheDataStore: C,
      fun retrieveRemoteDataStore(): R{
          return remoteDataStore
      }
-
-
-
 }

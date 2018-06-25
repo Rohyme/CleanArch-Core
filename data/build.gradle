@@ -41,6 +41,7 @@ dependencies {
     implementation project(':domain')
     api libs.room
     api libs.roomRx
+    api libs.subjectRelayRx
     kapt libs.roomAnnotation
     implementation libs.paging
     testImplementation libs.pagingTest

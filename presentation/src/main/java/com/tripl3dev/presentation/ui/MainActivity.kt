@@ -27,7 +27,7 @@ class MainActivity : BaseActivityWithInjector() {
         setContentView(R.layout.activity_main)
         val myViewModel = vm as MainActivityViewModel
         myViewModel.getShowPostUpdated().observe(this, Observer<Stateview> { t ->
-            if (t !is Stateview.Loading) {
+            if (t !== Stateview.Loading) {
                 progress.visibility = View.GONE
                 testText.visibility = View.VISIBLE
             }

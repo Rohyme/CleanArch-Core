@@ -21,6 +21,7 @@ dependencies {
     api libs.room
     api libs.roomRx
     kapt libs.roomAnnotation
+    api libs.subjectRelayRx
 }
 
 sourceCompatibility = "1.7"
