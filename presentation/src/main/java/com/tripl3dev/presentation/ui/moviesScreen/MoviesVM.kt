@@ -10,7 +10,6 @@ import com.tripl3dev.domain.interactor.CustomFlowableObserver
 import com.tripl3dev.domain.interactor.SingleObserverCB
 import com.tripl3dev.domain.managers.Stateview
 import com.tripl3dev.presentation.base.BaseViewModel
-import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMoviesUseCase,
@@ -18,7 +17,6 @@ class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMov
                                    private val topRatedMoviesUseCase: GetTopRatedMoviesUseCase) : BaseViewModel() {
 
 
-    private var latestPublisher: PublishSubject<Long> = PublishSubject.create()
     private var latestMovies: MutableLiveData<Stateview> = MutableLiveData()
     private var popularMovies: MutableLiveData<Stateview> = MutableLiveData()
     private var topRatedMovies: MutableLiveData<Stateview> = MutableLiveData()
@@ -85,6 +83,7 @@ class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMov
 
             override fun onError(e: Throwable) {
                 super.onError(e)
+
                 popularMovies.postValue(Stateview.Failure(e))
             }
         }), pageNum)
@@ -99,7 +98,6 @@ class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMov
 
             override fun onSubscribe() {
                 super.onSubscribe()
-//                if (pageNum == 1)
                 topRatedMovies.postValue(Stateview.Loading)
             }
 

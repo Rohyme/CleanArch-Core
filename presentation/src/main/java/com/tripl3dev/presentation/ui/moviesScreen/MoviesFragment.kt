@@ -8,11 +8,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.*
+import android.widget.Button
 import android.widget.PopupMenu
 import android.widget.TextView
+import android.widget.Toast
 import com.tripl3dev.dataStore.movies.MoviesRepositoryImp
 import com.tripl3dev.domain.Entity.MoviesEntity
-import com.tripl3dev.domain.managers.NetworkUtils
 import com.tripl3dev.domain.managers.Stateview
 import com.tripl3dev.presentation.R
 import com.tripl3dev.presentation.base.BaseFragmentWithInjector
@@ -56,7 +57,6 @@ class MoviesFragment : BaseFragmentWithInjector(), MoviesListAdapter.MoviesCB {
         onLatestMoviesFetched()
         onPopularMoviesFetched()
         onTopRatedMoviesFetched()
-        onInternetConnectionChanged()
         return binding.root
     }
 
@@ -81,36 +81,28 @@ class MoviesFragment : BaseFragmentWithInjector(), MoviesListAdapter.MoviesCB {
         return MoviesVM::class.java
     }
 
-    fun onInternetConnectionChanged() {
-        NetworkUtils.getNetworkUtils().getNetworkStatus().subscribe {
-            when (it) {
-                NetworkUtils.CONNECTED -> {
-                    if (connected == null) return@subscribe
-                    connected.visibility = View.VISIBLE
-                    Handler().postDelayed({
-                        if (connected == null) return@postDelayed
-                        if (connected.isAttachedToWindow && connected.visibility == View.VISIBLE)
-                            connected.visibility = View.GONE
-                    }, 2000)
-                    if (noInternetFound.visibility == View.VISIBLE) {
-                        noInternetFound.visibility = View.GONE
-                    }
-                }
 
-                NetworkUtils.DISCONNECTED -> {
-                    noInternetFound.visibility = View.VISIBLE
-                    if (connected.visibility == View.VISIBLE) {
-                        connected.visibility = View.GONE
-                    }
-                }
-                else -> {
-                    Log.i("Network", "Default Status")
-                }
-            }
+    override fun onConnected() {
+        super.onConnected()
+        if (connected == null) return
+        connected.visibility = View.VISIBLE
+        Handler().postDelayed({
+            if (connected == null) return@postDelayed
+            if (connected.isAttachedToWindow && connected.visibility == View.VISIBLE)
+                connected.visibility = View.GONE
+        }, 2000)
+        if (noInternetFound.visibility == View.VISIBLE) {
+            noInternetFound.visibility = View.GONE
         }
     }
 
-
+    override fun onDisconnected() {
+        super.onDisconnected()
+        noInternetFound.visibility = View.VISIBLE
+        if (connected.visibility == View.VISIBLE) {
+            connected.visibility = View.GONE
+        }
+    }
 
     fun onTypeChangeObserver() {
         moviesType.observe(this, Observer<Int> {
@@ -208,12 +200,21 @@ class MoviesFragment : BaseFragmentWithInjector(), MoviesListAdapter.MoviesCB {
     }
 
     fun showError(e: Throwable) {
-        val v: TextView = moviesListContainer.setState(StatesConstants.ERROR_STATE).findViewById(R.id.textError)
-        v.setOnClickListener {
-            retry()
+        if (currentPage == 1) {
+            val v = moviesListContainer.setState(StatesConstants.ERROR_STATE)
+            val text: TextView = v.findViewById(R.id.textError)
+            val button: Button = v.findViewById(R.id.textButton)
+            text.text = e.message
+            button.setOnClickListener {
+                retry()
+            }
+        } else {
+            moviesListContainer.setState(StatesConstants.NORMAL_STATE)
+            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
         }
-        v.text = e.message
+
     }
+
 
     fun retry() {
         when (moviesType.value) {

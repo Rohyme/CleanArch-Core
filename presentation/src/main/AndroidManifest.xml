@@ -34,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.MainScreenActivity" />
-
+        <activity android:name=".ui.movieDetails.MovieDetailsActivity"></activity>
     </application>
 
 </manifest>

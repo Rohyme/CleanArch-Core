@@ -4,6 +4,7 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.tripl3dev.presentation.ui.MainActivityViewModel
 import com.tripl3dev.presentation.ui.login.GuestSessionVM
+import com.tripl3dev.presentation.ui.movieDetails.MovieDetailsVM
 import com.tripl3dev.presentation.ui.moviesScreen.MoviesVM
 import com.tripl3dev.presentation.ui.peopleScreen.PeopleVM
 import com.tripl3dev.presentation.ui.tvShowsScreen.TVShowsVM
@@ -58,5 +59,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(TVShowsVM::class)
     internal abstract fun TvShowsViewModel(viewModel: TVShowsVM): ViewModel
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MovieDetailsVM::class)
+    internal abstract fun MovieDetailsViewModel(viewModel: MovieDetailsVM): ViewModel
 
 }

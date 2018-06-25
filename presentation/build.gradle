@@ -71,7 +71,6 @@ dependencies {
 
     implementation 'ru.alexbykov:nopaginate:0.9.9'
 
-
     //WorkManager
 
     def work_version = "1.0.0-alpha03"

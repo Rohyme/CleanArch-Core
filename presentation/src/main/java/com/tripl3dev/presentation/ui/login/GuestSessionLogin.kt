@@ -40,6 +40,7 @@ class GuestSessionLogin : BaseActivityWithInjector() {
                     loginBt.setState(StatesConstants.LOADING_STATE)
                 }
                 is Stateview.Failure -> {
+                    loginBt.setState(StatesConstants.NORMAL_STATE)
                     Toast.makeText(this, t.error.message, Toast.LENGTH_SHORT).show()
                 }
             }
