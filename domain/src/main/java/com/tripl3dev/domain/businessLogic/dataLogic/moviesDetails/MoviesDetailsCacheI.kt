@@ -5,5 +5,6 @@ import com.tripl3dev.domain.repository.base.baseDataRetrieveMechanism.BaseCasheI
 
 interface MoviesDetailsCacheI : BaseCasheI, MoviesDetailsDataStoreI {
     fun saveMovieDetails(movie: MovieDetails)
+    fun toggleIsFavourite(movieId: Int)
 
 }

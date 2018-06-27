@@ -28,7 +28,6 @@ class MoviesCacheImp @Inject constructor(val moviesDb: MoviesDao) : MoviesCacheI
     }
 
     override fun saveLatestMovies(moviesEntity: MoviesEntity) {
-
         moviesEntity.setMoviesTypeAndId(MoviesRepositoryImp.LATEST_MOVIES)
         moviesDb.insertMoviesList(moviesEntity)
         latestCacheManager.setLastWriteTime()

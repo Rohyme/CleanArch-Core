@@ -110,6 +110,12 @@ class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMov
 
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        topRatedMoviesUseCase.unSubscribe()
+        popularMoviesUseCase.unSubscribe()
+        latestMoviesUseCase.unSubscribe()
+    }
 
 
 

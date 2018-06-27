@@ -5,4 +5,5 @@ import io.reactivex.Flowable
 
 interface MoviesDetailsRepositoryI {
     fun getMovieDetails(movieId: Int): Flowable<MovieDetails>
+    fun toggleMovieInFav(movieId: Int)
 }

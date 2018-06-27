@@ -24,7 +24,8 @@ class DataBaseModule {
     @Provides
     @Singleton
     fun provideMoviesDao(appContext: MyApplication): MoviesDao {
-        val movieDao = Room.databaseBuilder(appContext, MoviesDb::class.java, "movies_db").build().getMoviesDao()
+        val movieDao = Room.databaseBuilder(appContext, MoviesDb::class.java, "movies_db").fallbackToDestructiveMigration()
+                .build().getMoviesDao()
         return movieDao
     }
 
@@ -32,7 +33,8 @@ class DataBaseModule {
     @Provides
     @Singleton
     fun provideMovieDetailsDao(appContext: MyApplication): MoviesDetailsDao {
-        val movieDao = Room.databaseBuilder(appContext, MovieDetailsDb::class.java, "movie_details_db").build().getMovieDetailsDao()
+        val movieDao = Room.databaseBuilder(appContext, MovieDetailsDb::class.java, "movie_details_db").fallbackToDestructiveMigration()
+                .build().getMovieDetailsDao()
         return movieDao
     }
 

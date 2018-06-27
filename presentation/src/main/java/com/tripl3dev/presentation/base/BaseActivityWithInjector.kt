@@ -27,11 +27,9 @@ abstract class BaseActivityWithInjector : AppCompatActivity(), NetworkUtils.Conn
 
 
     override fun onConnected() {
-        super.onConnected()
     }
 
     override fun onDisconnected() {
-        super.onDisconnected()
     }
 
     fun onConnectionChanged() {

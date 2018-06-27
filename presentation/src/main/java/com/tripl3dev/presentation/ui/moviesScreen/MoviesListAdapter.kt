@@ -33,6 +33,10 @@ class MoviesListAdapter(bundle: Bundle) : BaseListVM<MoviesEntity.Movie, MoviesL
         val itemBinding = DataBindingUtil.bind<ListItemMovieScreenBinding>(root!!)
         itemBinding!!.movieImage.loadImage(getListOp().getList()!![position].posterPath)
         itemBinding.movieTitle.text = getListOp().getList()!![position].title
+        itemBinding.root.setOnClickListener {
+            listCallback.onItemClicked(getListOp().getList()!![position])
+
+        }
     }
 
 
@@ -42,6 +46,7 @@ class MoviesListAdapter(bundle: Bundle) : BaseListVM<MoviesEntity.Movie, MoviesL
 
     interface MoviesCB : IListCallback {
         fun onLoadMore(currentPage: Int)
+        fun onItemClicked(movie: MoviesEntity.Movie)
     }
 
 }

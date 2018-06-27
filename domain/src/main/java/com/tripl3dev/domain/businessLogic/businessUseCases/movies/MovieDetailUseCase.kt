@@ -8,7 +8,7 @@ import com.tripl3dev.domain.interactor.FlowableUseCase
 import io.reactivex.Flowable
 import javax.inject.Inject
 
-class MovieDetailUseCase @Inject constructor(val repository: MoviesDetailsRepositoryI,
+class MovieDetailUseCase @Inject constructor(private val repository: MoviesDetailsRepositoryI,
                                              observe: ObserveOnScheduler,
                                              subscribe: SubscribtionOnScheduler)
     : FlowableUseCase<MovieDetails, Int>(observe, subscribe) {

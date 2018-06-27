@@ -7,7 +7,7 @@ import com.tripl3dev.domain.service.ApiService
 import io.reactivex.Single
 import javax.inject.Inject
 
-class MoviesDetailsRemoteImp @Inject constructor(val api: ApiService) : MoviesDetailsRemoteI {
+class MoviesDetailsRemoteImp @Inject constructor(private val api: ApiService) : MoviesDetailsRemoteI {
     override fun getMovieDetails(movieId: Int): Single<MovieDetails> {
         return api.getMovieDetails(movieId, Constants.MOVIES_API_TOKEN)
     }

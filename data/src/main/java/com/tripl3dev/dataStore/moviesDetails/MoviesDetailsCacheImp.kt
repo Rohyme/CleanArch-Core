@@ -6,6 +6,11 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 class MoviesDetailsCacheImp @Inject constructor(val dao: MoviesDetailsDao) : MoviesDetailsCacheI {
+    override fun toggleIsFavourite(movieId: Int) {
+        dao.toggleFavourite(movieId)
+    }
+
+
     override fun saveMovieDetails(movie: MovieDetails) {
         dao.insertMovie(movie)
     }

@@ -54,4 +54,10 @@ class GuestSessionVM @Inject constructor(val createUserUseCase: CreateGuestSessi
         return isLoggedIn
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        checkLoggedInUseCase.unSubscribe()
+        createUserUseCase.unSubscribe()
+    }
+
 }

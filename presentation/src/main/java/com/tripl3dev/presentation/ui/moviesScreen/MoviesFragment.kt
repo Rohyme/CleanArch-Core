@@ -3,6 +3,7 @@ package com.tripl3dev.presentation.ui.moviesScreen
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.content.Context
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
@@ -19,6 +20,7 @@ import com.tripl3dev.presentation.R
 import com.tripl3dev.presentation.base.BaseFragmentWithInjector
 import com.tripl3dev.presentation.base.BaseViewModel
 import com.tripl3dev.presentation.databinding.FragmentMoviesScreenBinding
+import com.tripl3dev.presentation.ui.MainScreenActivity
 import com.tripl3dev.prettystates.StatesConstants
 import com.tripl3dev.prettystates.setState
 import com.trippl3dev.listlibrary.implementation.PrettyList
@@ -26,6 +28,14 @@ import com.trippl3dev.listlibrary.implementation.RecyclerListIm
 import kotlinx.android.synthetic.main.fragment_movies_screen.*
 
 class MoviesFragment : BaseFragmentWithInjector(), MoviesListAdapter.MoviesCB {
+
+
+    override fun onItemClicked(movie: MoviesEntity.Movie) {
+//     MovieDetailsActivity.navigateToMovieDetailsActivity(context!!,movie.id)
+        val intent = Intent(context, MainScreenActivity::class.java)
+//        intent.putExtra(MovieDetailsActivity.MOVIE_ID,383498)
+        startActivity(intent)
+    }
 
     var moviesType: MutableLiveData<Int> = MutableLiveData()
     lateinit var viewModel: MoviesVM
