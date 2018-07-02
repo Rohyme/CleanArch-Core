@@ -43,9 +43,6 @@ buildscript {
                 pagingTest:('android.arch.paging:common:' +paging_version),
                 pagingRx:('android.arch.paging:rxjava2:1.0.0-rc1'),
                 subjectRelayRx:('com.jakewharton.rxrelay2:rxrelay:2.0.0')
-
-
-
         ]
     }
 

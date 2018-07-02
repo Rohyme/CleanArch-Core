@@ -56,7 +56,6 @@ dependencies {
     implementation libs.roomRx
     kapt libs.roomAnnotation
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.1'
-    implementation project(':prettystates')
     implementation 'com.android.support:design:27.1.1'
     implementation libs.paging
     testImplementation libs.pagingTest
@@ -73,16 +72,6 @@ dependencies {
 
     implementation 'ru.alexbykov:nopaginate:0.9.9'
 
-    //WorkManager
 
-    def work_version = "1.0.0-alpha03"
-
-    implementation "android.arch.work:work-runtime:$work_version" // use -ktx for Kotlin
-
-    // optional - Firebase JobDispatcher support
-    implementation "android.arch.work:work-firebase:$work_version"
-
-    // optional - Test helpers
-    androidTestImplementation "android.arch.work:work-testing:$work_version"
 
 }
