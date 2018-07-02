@@ -68,6 +68,7 @@ dependencies {
     debugImplementation 'com.amitshekhar.android:debug-db:1.0.3'
     implementation 'com.github.Tripl3Dev:PrettyList:2.1'
     implementation libs.subjectRelayRx
+    implementation 'com.github.Tripl3Dev:PrettyStateView:2.0.0'
 
 
     implementation 'ru.alexbykov:nopaginate:0.9.9'
@@ -83,4 +84,5 @@ dependencies {
 
     // optional - Test helpers
     androidTestImplementation "android.arch.work:work-testing:$work_version"
+
 }
