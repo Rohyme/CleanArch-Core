@@ -1,9 +1,9 @@
 package com.tripl3dev.dataStore.login
 
-import com.tripl3dev.dataStore.SharedPreferenceUtil
 import com.tripl3dev.domain.Entity.GuestEntity
 import com.tripl3dev.domain.businessLogic.dataLogic.loginLogic.LoginCacheI
 import com.tripl3dev.domain.managers.getDateInMilliSeconds
+import com.tripl3dev.utils.SharedPreferenceUtil
 import io.reactivex.Single
 import javax.inject.Inject
 

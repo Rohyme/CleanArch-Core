@@ -13,7 +13,6 @@ import javax.inject.Inject
 abstract class BaseFragmentWithInjector : Fragment(), NetworkUtils.ConnectionStatusCB {
     @Inject
     lateinit var factory: ViewModelFactory
-
     lateinit var vm: BaseViewModel
     lateinit var disposal: Disposable
 
@@ -21,12 +20,17 @@ abstract class BaseFragmentWithInjector : Fragment(), NetworkUtils.ConnectionSta
         super.onCreate(savedInstanceState)
         (activity?.application as MyApplication).networkComponent.inject(this)
         vm = ViewModelProviders.of(this, factory)[getActivityVM()]
-        onConnectionChanged()
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        onConnectionChanged()
         if (NetworkUtils.getNetworkUtils().isNotConnected()) {
             onDisconnected()
         }

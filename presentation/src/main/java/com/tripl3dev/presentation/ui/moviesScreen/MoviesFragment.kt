@@ -1,91 +1,121 @@
 package com.tripl3dev.presentation.ui.moviesScreen
 
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
-import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
+import android.support.v7.util.DiffUtil
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.*
 import android.widget.Button
-import android.widget.PopupMenu
 import android.widget.TextView
-import android.widget.Toast
 import com.tripl3dev.dataStore.movies.MoviesRepositoryImp
 import com.tripl3dev.domain.Entity.MoviesEntity
 import com.tripl3dev.domain.managers.Stateview
 import com.tripl3dev.presentation.R
 import com.tripl3dev.presentation.base.BaseFragmentWithInjector
 import com.tripl3dev.presentation.base.BaseViewModel
+import com.tripl3dev.presentation.base.baseAdapter.GenericAdapter
+import com.tripl3dev.presentation.base.baseAdapter.GenericHolder
+import com.tripl3dev.presentation.base.baseAdapter.HolderInterface
+import com.tripl3dev.presentation.base.getException
+import com.tripl3dev.presentation.base.loadImage
 import com.tripl3dev.presentation.databinding.FragmentMoviesScreenBinding
-import com.tripl3dev.presentation.ui.MainScreenActivity
+import com.tripl3dev.presentation.databinding.ListItemMovieScreenBinding
+import com.tripl3dev.presentation.ui.movieDetails.MovieDetailsActivity
+import com.tripl3dev.presentation.utils.CustomErrorPagination
+import com.tripl3dev.presentation.utils.MyDiffUtil
 import com.tripl3dev.prettystates.StatesConstants
 import com.tripl3dev.prettystates.setState
-import com.trippl3dev.listlibrary.implementation.PrettyList
-import com.trippl3dev.listlibrary.implementation.RecyclerListIm
+import io.reactivex.Flowable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_movies_screen.*
+import ru.alexbykov.nopaginate.paginate.NoPaginate
 
-class MoviesFragment : BaseFragmentWithInjector(), MoviesListAdapter.MoviesCB {
+class MoviesFragment : BaseFragmentWithInjector(), HolderInterface {
+    var myList: ArrayList<MoviesEntity.Movie> = ArrayList()
+    lateinit var viewModel: MoviesVM
+    lateinit var binding: FragmentMoviesScreenBinding
+    lateinit var mAdapter: GenericAdapter
+    lateinit var paginate: NoPaginate
 
 
-    override fun onItemClicked(movie: MoviesEntity.Movie) {
-//     MovieDetailsActivity.navigateToMovieDetailsActivity(context!!,movie.id)
-        val intent = Intent(context, MainScreenActivity::class.java)
-//        intent.putExtra(MovieDetailsActivity.MOVIE_ID,383498)
-        startActivity(intent)
+    override fun getHolder(view: ViewGroup?): RecyclerView.ViewHolder {
+        return GenericHolder(LayoutInflater.from(context).inflate(R.layout.list_item_movie_screen, view, false))
     }
 
-    var moviesType: MutableLiveData<Int> = MutableLiveData()
-    lateinit var viewModel: MoviesVM
-    var currentPage = 1
-    lateinit var binding: FragmentMoviesScreenBinding
-    lateinit var baseListVM: RecyclerListIm
+    override fun getViewData(holder: RecyclerView.ViewHolder?, postion: Int) {
+        val itemBinding = DataBindingUtil.bind<ListItemMovieScreenBinding>(holder?.itemView!!)
+        itemBinding!!.movieImage.loadImage(myList[postion].posterPath)
+        itemBinding.movieTitle.text = myList[postion].title
+        itemBinding.root.setOnClickListener {
+            val intent = Intent(context, MovieDetailsActivity::class.java)
+            intent.putExtra(MovieDetailsActivity.MOVIE_ID, myList[postion].id)
+            startActivity(intent)
+        }
+
+    }
+
+
+    override fun listsize(): Int {
+        return myList.size
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movies_screen, container, false)
+        retainInstance = true
         viewModel = vm as MoviesVM
-        PrettyList.get(childFragmentManager).init()
-                .setVM(MoviesListAdapter::class.java.name)
-                .putBundle(Bundle())
-                .putListInContainerWithId(R.id.moviesListContainer)
-                .addListener(object : PrettyList.ListReadyCallbak {
-                    override fun onListReady(baseListVM: RecyclerListIm?) {
-                        this@MoviesFragment.baseListVM = baseListVM!!
-                        this@MoviesFragment.baseListVM.setListVMCallback(this@MoviesFragment)
-                        moviesType.postValue(MoviesRepositoryImp.LATEST_MOVIES)
-                    }
-                })
         onTypeChangeObserver()
         onLatestMoviesFetched()
         onPopularMoviesFetched()
         onTopRatedMoviesFetched()
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_movies_screen, container, false)
+        setUpMMoviesList()
         return binding.root
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
+    private fun setUpMMoviesList() {
+        mAdapter = GenericAdapter(this)
+        binding.moviesRecycler.layoutManager = GridLayoutManager(context, getSpanCount()) as RecyclerView.LayoutManager?
+        binding.moviesRecycler.setHasFixedSize(true)
+        binding.moviesRecycler.adapter = mAdapter
+        paginate = NoPaginate.with(binding.moviesRecycler).setOnLoadMoreListener {
+            if (!myList.isEmpty()) {
+                fetchData(viewModel.getMoviesType().value)
+            }
+        }.setCustomErrorItem(CustomErrorPagination(object : CustomErrorPagination.PaginateErrorListener {
+            override fun onRetryClicked() {
+                retry()
+            }
+
+            override fun errorTextToAppear(): String {
+                return "No Internet Found"
+            }
+
+        })).build()
+        if (viewModel.currentList.isNotEmpty())
+            updateList(viewModel.currentList)
 
     }
 
-    override fun onLoadMore(currentPage: Int) {
-        showNormal()
-        this.currentPage++
-        fetchData(moviesType.value)
+
+    fun getSpanCount(): Int {
+        return if (activity?.resources?.configuration?.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            2
+        } else {
+            3
+        }
     }
 
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-    }
 
     override fun getActivityVM(): Class<out BaseViewModel> {
         return MoviesVM::class.java
@@ -115,11 +145,10 @@ class MoviesFragment : BaseFragmentWithInjector(), MoviesListAdapter.MoviesCB {
     }
 
     fun onTypeChangeObserver() {
-        moviesType.observe(this, Observer<Int> {
-            currentPage = 1
-            baseListVM.operation.setList(emptyList())
-            baseListVM.stopScroll()
-            Log.e("dataBasePlace", context!!.getDatabasePath("movies_db").absolutePath)
+        viewModel.getMoviesType().observe(this, Observer<Int> {
+            viewModel.resetList()
+            myList.clear()
+            updateList(myList)
             fetchData(it)
         })
     }
@@ -128,29 +157,68 @@ class MoviesFragment : BaseFragmentWithInjector(), MoviesListAdapter.MoviesCB {
     fun fetchData(it: Int?) {
         when (it) {
             MoviesRepositoryImp.LATEST_MOVIES -> {
-                viewModel.fetchLatestMovies(currentPage)
+                viewModel.fetchLatestMovies()
             }
 
             MoviesRepositoryImp.TOP_RATED_MOVIES -> {
-                viewModel.fetchtopRatedMovies(currentPage)
+                viewModel.fetchtopRatedMovies()
             }
 
             MoviesRepositoryImp.POPULAR_MOVIES -> {
-                viewModel.fetchPopularMovies(currentPage)
+                viewModel.fetchPopularMovies()
             }
 
         }
     }
 
-    fun onRetry() {
-
-    }
 
     fun onLatestMoviesFetched() {
         viewModel.getLatestMovies().observe(this, Observer<Stateview> {
             when (it) {
                 is Stateview.Success<*> -> {
-                    showNormal()
+                    loadData(it.data as List<MoviesEntity.Movie>)
+                }
+                is Stateview.Failure -> {
+                    showError(it.error)
+                }
+                is Stateview.Loading -> {
+                    loading()
+                }
+                is Stateview.HasNoData -> {
+                    stopLoading()
+                }
+            }
+        })
+    }
+
+    private fun stopLoading() {
+        if (viewModel.currentPage > 1) {
+            paginate.showLoading(false)
+        } else {
+            moviesRecycler.setState(StatesConstants.NORMAL_STATE)
+        }
+    }
+
+    fun onTopRatedMoviesFetched() {
+        viewModel.getTopRated().observe(this, Observer<Stateview> {
+            when (it) {
+                is Stateview.Success<*> -> {
+                    loadData(it.data as List<MoviesEntity.Movie>)
+                }
+                is Stateview.Failure -> {
+                    showError(it.error)
+                }
+                is Stateview.Loading -> {
+                    loading()
+                }
+            }
+        })
+    }
+
+    fun onPopularMoviesFetched() {
+        viewModel.getPopularMovies().observe(this, Observer<Stateview> {
+            when (it) {
+                is Stateview.Success<*> -> {
                     loadData(it.data as List<MoviesEntity.Movie>)
                 }
                 is Stateview.Failure -> {
@@ -164,70 +232,67 @@ class MoviesFragment : BaseFragmentWithInjector(), MoviesListAdapter.MoviesCB {
     }
 
     private fun loadData(list: List<MoviesEntity.Movie>) {
-        if (currentPage == 1)
-            baseListVM.operation.setList(list)
-        else
-            baseListVM.operation.addList(list)
+
+        if (viewModel.currentPage == 1) {
+            moviesRecycler.setState(StatesConstants.NORMAL_STATE)
+        } else {
+            paginate.showLoading(false)
+        }
+        updateList(ArrayList(list))
 
     }
 
-    fun onPopularMoviesFetched() {
-        viewModel.getPopularMovies().observe(this, Observer<Stateview> {
-            when (it) {
-                is Stateview.Success<*> -> {
-                    showNormal()
-                    loadData(it.data as List<MoviesEntity.Movie>)
+    fun updateList(newList: ArrayList<MoviesEntity.Movie>) {
+        Flowable.fromArray(newList)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.computation())
+                .map {
+                    DiffUtil.calculateDiff(MyDiffUtil(myList, it))
                 }
-                is Stateview.Failure -> {
-                    showError(it.error)
+                .doOnNext {
+                    if ((newList.size - myList.size) > 0) {
+                        viewModel.currentPage++
+                    }
+                    myList = newList
                 }
-                is Stateview.Loading -> {
-                    loading()
+                .subscribe {
+                    it.dispatchUpdatesTo(mAdapter)
+
                 }
-            }
-        })
     }
 
-    fun onTopRatedMoviesFetched() {
-        viewModel.getTopRated().observe(this, Observer<Stateview> {
-            when (it) {
-                is Stateview.Success<*> -> {
-                    showNormal()
-                    loadData(it.data as List<MoviesEntity.Movie>)
-                }
-                is Stateview.Failure -> {
-                    showError(it.error)
-                }
-                is Stateview.Loading -> {
-                    loading()
-                }
-            }
-        })
-    }
 
     fun loading() {
-        moviesListContainer.setState(StatesConstants.LOADING_STATE)
+        paginate.showError(false)
+        if (viewModel.currentPage == 1)
+            moviesRecycler.setState(StatesConstants.LOADING_STATE)
+        else {
+            showNormal()
+            paginate.showLoading(true)
+            Handler().postDelayed({}, 300)
+        }
     }
 
     fun showError(e: Throwable) {
-        if (currentPage == 1) {
-            val v = moviesListContainer.setState(StatesConstants.ERROR_STATE)
+        if (viewModel.currentPage == 1) {
+            val ex = e.getException()
+            val v = moviesRecycler.setState(StatesConstants.ERROR_STATE)
             val text: TextView = v.findViewById(R.id.textError)
             val button: Button = v.findViewById(R.id.textButton)
-            text.text = e.message
+            text.text = "Error happened !! \n Can't Connect to Server"
             button.setOnClickListener {
                 retry()
             }
         } else {
-            moviesListContainer.setState(StatesConstants.NORMAL_STATE)
-            Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
+            showNormal()
+            paginate.showError(true)
         }
 
     }
 
 
     fun retry() {
-        when (moviesType.value) {
+        when (viewModel.getMoviesType().value) {
             MoviesRepositoryImp.POPULAR_MOVIES -> {
                 viewModel.retryPopularMovies()
             }
@@ -241,7 +306,7 @@ class MoviesFragment : BaseFragmentWithInjector(), MoviesListAdapter.MoviesCB {
     }
 
     fun showNormal() {
-        moviesListContainer.setState(StatesConstants.NORMAL_STATE)
+        moviesRecycler.setState(StatesConstants.NORMAL_STATE)
 
     }
 
@@ -256,47 +321,30 @@ class MoviesFragment : BaseFragmentWithInjector(), MoviesListAdapter.MoviesCB {
             }
 
             R.id.filterPopularMovies -> {
-                moviesType.postValue(MoviesRepositoryImp.POPULAR_MOVIES)
+                viewModel.setMoviesType(MoviesRepositoryImp.POPULAR_MOVIES)
+
                 return true
             }
             R.id.filterComingMovies -> {
-                moviesType.postValue(MoviesRepositoryImp.LATEST_MOVIES)
+                viewModel.setMoviesType(MoviesRepositoryImp.LATEST_MOVIES)
                 return true
             }
 
             R.id.filterTopRatedMovies -> {
-                moviesType.postValue(MoviesRepositoryImp.TOP_RATED_MOVIES)
+                viewModel.setMoviesType(MoviesRepositoryImp.TOP_RATED_MOVIES)
                 return true
             }
         }
         return false
     }
 
-    private fun showFilterPopUp() {
-        val view = view?.findViewById<View>(R.id.filterMovies)
-        val popup = PopupMenu(context, view)
-        popup.inflate(R.menu.menu_filter_movies)
-        popup.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.filterPopularMovies -> {
-                    moviesType.postValue(MoviesRepositoryImp.POPULAR_MOVIES)
-                    return@setOnMenuItemClickListener true
-                }
-                R.id.filterComingMovies -> {
-                    moviesType.postValue(MoviesRepositoryImp.LATEST_MOVIES)
-                    return@setOnMenuItemClickListener true
-                }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        paginate.unbind()
 
-                R.id.filterTopRatedMovies -> {
-                    moviesType.postValue(MoviesRepositoryImp.TOP_RATED_MOVIES)
-                    return@setOnMenuItemClickListener true
-                }
-                else -> {
-                    return@setOnMenuItemClickListener false
-                }
-
-            }
-        }
     }
+
+
+
 
 }

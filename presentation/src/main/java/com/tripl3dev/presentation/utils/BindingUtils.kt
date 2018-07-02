@@ -10,11 +10,11 @@ fun ImageButton.setStatus(status: Int) {
     when (status) {
         MovieDetailsActivity.FAVOURITE -> {
             this.isSelected = true
-            this.isEnabled = false
+            this.isEnabled = true
         }
         MovieDetailsActivity.NOT_FAVOURITE -> {
             this.isSelected = false
-            this.isEnabled = false
+            this.isEnabled = true
         }
         MovieDetailsActivity.FAVOURITE_SYNCING -> {
             this.isEnabled = false

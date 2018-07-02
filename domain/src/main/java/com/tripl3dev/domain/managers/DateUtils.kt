@@ -11,4 +11,5 @@ fun String.getDateInMilliSeconds(): Long {
     simpleDateFormat.timeZone = TimeZone.getTimeZone("UTC")
     val myDate = simpleDateFormat.parse(dateAndTime)
     return myDate.time
+
 }

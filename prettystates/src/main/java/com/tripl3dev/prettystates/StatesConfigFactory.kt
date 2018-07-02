@@ -1,16 +1,13 @@
 package com.tripl3dev.prettystates
 
 import android.content.Context
-import android.support.annotation.IntegerRes
+import android.support.annotation.LayoutRes
 import android.util.SparseArray
+import android.view.View
 
 
 class StatesConfigFactory private constructor() {
     private var viewsMap: SparseArray<Int> = SparseArray()
-
-    init {
-    }
-
 
     companion object {
         internal var instance: StatesConfigFactory? = null
@@ -31,24 +28,10 @@ class StatesConfigFactory private constructor() {
     }
 
 
-    fun addStateView(viewStatus: Int, @IntegerRes customLayout: Int) {
-        viewsMap.put(viewStatus, customLayout)
-    }
+    /**
+     * Init default views
+     */
 
-
-    fun removeStateView(viewStatus: Int) {
-        viewsMap.remove(viewStatus)
-    }
-
-    fun getStateView(stateType: Int): Int {
-        if (viewsMap.get(stateType) != null) {
-            return viewsMap[stateType]!!
-        } else {
-            throw Throwable("You haven't set stateView with that State Type")
-        }
-    }
-
-    //Init default views
     fun initDefaultViews() {
         viewsMap.put(StatesConstants.EMPTY_STATE, R.layout.prettystates_default_empty_view)
         viewsMap.put(StatesConstants.ERROR_STATE, R.layout.prettystates_default_error_view)
@@ -56,26 +39,99 @@ class StatesConfigFactory private constructor() {
         viewsMap.put(StatesConstants.NORMAL_STATE, R.id.state_view_layout)
     }
 
-
-    fun initViews(context: Context) {
+    /**
+     * Init Normal view
+     */
+    fun initViews() {
         viewsMap.put(StatesConstants.NORMAL_STATE, R.id.state_view_layout)
     }
 
-    fun init() {
-        viewsMap.put(StatesConstants.NORMAL_STATE, R.id.state_view_layout)
+
+    /**
+     * Adding new stateView
+     *
+     *@param viewStateType -> Constant for your new stateView
+     * @param customLayout -> Your new stateView layout
+     */
+    fun addStateView(viewStateType: Int, @LayoutRes customLayout: Int) {
+        if (viewsMap[viewStateType] == null)
+            viewsMap.put(viewStateType, customLayout)
     }
 
-    fun setDefaultEmptyLayout(@IntegerRes emptyLayout: Int): StatesConfigFactory {
+    /**
+     * Remove Existing stateView
+     * @param viewStateType -> Constant of your StateView you wanna to remove
+     */
+
+    fun removeStateView(viewStateType: Int) {
+        if (viewsMap[viewStateType] != null)
+            viewsMap.remove(viewStateType)
+        else
+            throw Throwable("There isn't any stateView with that State Type")
+    }
+
+    /**
+     * set Existing stateView with new layout
+     * @param viewStateType -> Constant of new stateView
+     * @param customLayout  -> Layout for your new stateview
+     */
+    fun setStateView(viewStateType: Int, @LayoutRes customLayout: Int) {
+        viewsMap.setValueAt(viewStateType, customLayout)
+    }
+
+    /**
+     * get existing stateView with State constant as
+     * @return  stateView layout
+     * @param viewStateType ->  Constant of stateView
+     */
+    fun getStateView(viewStateType: Int): Int {
+        if (viewsMap.get(viewStateType) != null) {
+            return viewsMap[viewStateType]!!
+        } else {
+            throw Throwable("There isn't any stateView with that State Type")
+        }
+    }
+
+
+    /**
+     * get existing stateView with State constant
+     * @return  stateView View
+     * @param viewStateType ->  Constant of stateView
+     */
+    fun getStateView(viewStateType: Int, context: Context): View {
+        if (viewsMap.get(viewStateType) != null) {
+            return viewsMap[viewStateType].inflateToView(context)
+        } else {
+            throw Throwable("There isn't any stateView with that State Type")
+        }
+    }
+
+
+    /**
+     * set default empty stateView layout
+     * @param emptyLayout -> layout of empty stateView
+     */
+    fun setDefaultEmptyLayout(@LayoutRes emptyLayout: Int): StatesConfigFactory {
         viewsMap.put(StatesConstants.EMPTY_STATE, emptyLayout)
         return this
     }
 
-    fun setDefaultErrorLayout(@IntegerRes errorLayout: Int, context: Context): StatesConfigFactory {
+
+    /**
+     * set default error stateView layout
+     * @param emptyLayout -> layout of empty stateView
+     */
+    fun setDefaultErrorLayout(@LayoutRes errorLayout: Int): StatesConfigFactory {
         viewsMap.put(StatesConstants.ERROR_STATE, errorLayout)
         return this
     }
 
-    fun setDefaultLoadingLayout(@IntegerRes loadingLayout: Int, context: Context): StatesConfigFactory {
+
+    /**
+     * set default loading stateView layout
+     * @param emptyLayout -> layout of empty stateView
+     */
+    fun setDefaultLoadingLayout(@LayoutRes loadingLayout: Int): StatesConfigFactory {
         viewsMap.put(StatesConstants.LOADING_STATE, loadingLayout)
         return this
     }

@@ -6,11 +6,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/moviesRecycler"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone" />
 
         <TextView
             android:id="@+id/noInternetFound"
@@ -36,12 +31,12 @@
             android:textSize="@dimen/_8ssp"
             android:visibility="gone" />
 
-        <FrameLayout
-            android:id="@+id/moviesListContainer"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/moviesRecycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1" />
-
+            android:layout_weight="1"
+            android:visibility="visible" />
 
     </LinearLayout>
 </layout>

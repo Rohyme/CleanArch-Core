@@ -2,9 +2,9 @@ package com.tripl3dev.presentation.di.modules.sharedPreferenceDi
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.tripl3dev.dataStore.SharedPreferenceUtil
 import com.tripl3dev.domain.managers.Constants
 import com.tripl3dev.presentation.application.MyApplication
+import com.tripl3dev.utils.SharedPreferenceUtil
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

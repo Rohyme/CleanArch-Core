@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fav="http://schemas.android.com/apk/res-auto"
+    xmlns:img="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -24,6 +26,7 @@
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            img:load="@{movie.posterPath}"
             android:background="@color/lightGray"
             app:layout_constraintHeight_percent=".3" />
 
@@ -36,12 +39,12 @@
             android:background="@android:color/transparent"
             android:onClick="onAddToFavouriteClicked"
             android:src="@drawable/selector_favourite"
+            fav:isFavourite="@{favourite}"
+            fav:isSynced="@{movie.syncing}"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
-        <!--fav:isFavourite="@{favourite}"-->
-        <!--fav:isSynced="@{movie.syncing}"-->
+
         <TextView
             android:id="@+id/movieTitle"
             android:layout_width="0dp"

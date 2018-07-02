@@ -2,6 +2,7 @@ package com.tripl3dev.presentation.ui.moviesScreen
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import com.tripl3dev.dataStore.movies.MoviesRepositoryImp
 import com.tripl3dev.domain.Entity.MoviesEntity
 import com.tripl3dev.domain.businessLogic.businessUseCases.movies.GetLatestMoviesUseCase
 import com.tripl3dev.domain.businessLogic.businessUseCases.movies.GetPopularMoviesUseCase
@@ -20,6 +21,14 @@ class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMov
     private var latestMovies: MutableLiveData<Stateview> = MutableLiveData()
     private var popularMovies: MutableLiveData<Stateview> = MutableLiveData()
     private var topRatedMovies: MutableLiveData<Stateview> = MutableLiveData()
+    private var moviesType: MutableLiveData<Int> = MutableLiveData()
+
+    init {
+        moviesType.postValue(MoviesRepositoryImp.LATEST_MOVIES)
+    }
+
+    var currentList: ArrayList<MoviesEntity.Movie> = ArrayList()
+    var currentPage: Int = 1
 
     fun getLatestMovies(): MutableLiveData<Stateview> {
         return latestMovies
@@ -33,6 +42,13 @@ class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMov
         return topRatedMovies
     }
 
+    fun getMoviesType(): LiveData<Int> {
+        return moviesType
+    }
+
+    fun setMoviesType(type: Int) {
+        moviesType.postValue(type)
+    }
     fun retryLatestMovies() {
         latestMoviesUseCase.retry()
     }
@@ -45,10 +61,11 @@ class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMov
         topRatedMoviesUseCase.retry()
     }
 
-    fun fetchLatestMovies(pageNum: Int) {
+
+    fun fetchLatestMovies() {
         latestMoviesUseCase.execute(CustomFlowableObserver(object : SingleObserverCB<MoviesEntity> {
             override fun onSuccess(t: MoviesEntity) {
-                latestMovies.postValue(Stateview.Success(t.moviesList))
+                loadData(latestMovies, t)
             }
 
             override fun onSubscribe() {
@@ -67,13 +84,16 @@ class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMov
 
             }
 
-        }), pageNum)
+            override fun onEmptyList() {
+                latestMovies.postValue(Stateview.HasNoData)
+            }
+        }), currentPage)
     }
 
-    fun fetchPopularMovies(pageNum: Int) {
+    fun fetchPopularMovies() {
         popularMoviesUseCase.execute(CustomFlowableObserver(object : SingleObserverCB<MoviesEntity> {
             override fun onSuccess(t: MoviesEntity) {
-                popularMovies.postValue(Stateview.Success(t.moviesList))
+                loadData(popularMovies, t)
             }
 
             override fun onSubscribe() {
@@ -86,14 +106,14 @@ class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMov
 
                 popularMovies.postValue(Stateview.Failure(e))
             }
-        }), pageNum)
+        }), currentPage)
 
     }
 
-    fun fetchtopRatedMovies(pageNum: Int) {
+    fun fetchtopRatedMovies() {
         topRatedMoviesUseCase.execute(CustomFlowableObserver(object : SingleObserverCB<MoviesEntity> {
             override fun onSuccess(t: MoviesEntity) {
-                topRatedMovies.postValue(Stateview.Success(t.moviesList))
+                loadData(topRatedMovies, t)
             }
 
             override fun onSubscribe() {
@@ -106,8 +126,18 @@ class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMov
                 topRatedMovies.postValue(Stateview.Failure(e))
 
             }
-        }), pageNum)
+        }), currentPage)
 
+    }
+
+    fun loadData(liveData: MutableLiveData<Stateview>, t: MoviesEntity) {
+        if (currentPage != 1) {
+            currentList.addAll(t.moviesList)
+            liveData.postValue(Stateview.Success(currentList))
+        } else {
+            currentList = ArrayList(t.moviesList)
+            liveData.postValue(Stateview.Success(currentList))
+        }
     }
 
     override fun onCleared() {
@@ -117,6 +147,11 @@ class MoviesVM @Inject constructor(private val latestMoviesUseCase: GetLatestMov
         latestMoviesUseCase.unSubscribe()
     }
 
+
+    fun resetList() {
+        currentPage = 1
+        currentList.clear()
+    }
 
 
 }

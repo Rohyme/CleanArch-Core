@@ -2,7 +2,6 @@ package com.tripl3dev.presentation.di.modules.viewModelDi
 
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import com.tripl3dev.presentation.ui.MainActivityViewModel
 import com.tripl3dev.presentation.ui.login.GuestSessionVM
 import com.tripl3dev.presentation.ui.movieDetails.MovieDetailsVM
 import com.tripl3dev.presentation.ui.moviesScreen.MoviesVM
@@ -33,12 +32,6 @@ abstract class ViewModelModule {
 
     @Binds
     internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(MainActivityViewModel::class)
-    internal abstract fun postListViewModel(viewModel: MainActivityViewModel): ViewModel
-
 
     @Binds
     @IntoMap

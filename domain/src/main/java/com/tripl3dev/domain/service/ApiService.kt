@@ -1,9 +1,6 @@
 package com.tripl3dev.domain.service
 
-import com.tripl3dev.domain.Entity.GuestEntity
-import com.tripl3dev.domain.Entity.MovieDetails
-import com.tripl3dev.domain.Entity.MoviesEntity
-import com.tripl3dev.domain.Entity.PostEntity
+import com.tripl3dev.domain.Entity.*
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -11,8 +8,6 @@ import retrofit2.http.Query
 
 interface ApiService {
 
-    @GET("posts")
-    fun getPosts(): Single<ArrayList<PostEntity>>
 
 
     @GET("/3/authentication/guest_session/new")
@@ -30,5 +25,13 @@ interface ApiService {
 
     @GET("/3/movie/{movie_id}")
     fun getMovieDetails(@Path("movie_id") movieId: Int, @Query("api_key") apiToken: String): Single<MovieDetails>
+
+
+    @GET("/3/person/popular")
+    fun getPopularPeople(@Query("api_key") apiToken: String, @Query("page") pageNum: Int): Single<ActorEntity>
+
+
+    @GET("/3/tv/popular")
+    fun getPopularTvShows(@Query("api_key") apiToken: String, @Query("page") pageNum: Int): Single<TvShowsEntity>
 
 }

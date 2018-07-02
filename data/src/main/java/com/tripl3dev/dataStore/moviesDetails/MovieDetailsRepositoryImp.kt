@@ -1,6 +1,5 @@
 package com.tripl3dev.dataStore.moviesDetails
 
-import android.util.Log
 import com.tripl3dev.domain.Entity.MovieDetails
 import com.tripl3dev.domain.businessLogic.dataLogic.moviesDetails.MoviesDetailsRepositoryI
 import io.reactivex.Flowable
@@ -16,7 +15,6 @@ class MovieDetailsRepositoryImp @Inject constructor(val factory: MoviesDetailsDa
         return Flowable.concatArrayDelayError(factory.retrieveCasheDataStore().getMovieDetails(movieId).toFlowable(),
                 factory.retrieveRemoteDataStore().getMovieDetails(movieId).toFlowable().doOnNext {
                     factory.retrieveCasheDataStore().saveMovieDetails(it)
-                    Log.e("thread", "${Thread.currentThread()}")
                 }).firstElement().toFlowable()
     }
 

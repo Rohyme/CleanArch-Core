@@ -1,12 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout>
 
-    <TextView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="People Screen" />
+        android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/noInternetFound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_red_dark"
+            android:gravity="center"
+            android:padding="@dimen/_4sdp"
+            android:text="No internet Found"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_8ssp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/connected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/holo_green_dark"
+            android:gravity="center"
+            android:padding="@dimen/_4sdp"
+            android:text="Connected"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/_8ssp"
+            android:visibility="gone" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/peopleList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:visibility="visible" />
+
+    </LinearLayout>
+</layout>

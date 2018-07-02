@@ -23,13 +23,16 @@ class MyApplication : Application() {
         appComponent = DaggerApplicationComponent.builder()
                 .applicationContext(this)
                 .builder()
+
         networkComponent = DaggerNetworkComponent.builder()
                 .application(this)
                 .baseUrl(Constants.BASE_URL)
                 .builder()
+
         networkDetector = ConnectivityReciever()
         val intent = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         registerReceiver(networkDetector, intent)
+
         StatesConfigFactory.intialize().initDefaultViews()
     }
 
